@@ -1544,3 +1544,51 @@ body.coal-theme .coal-page .el-tag--danger {
   color: #ffc5c1 !important;
 }
 
+/* 金正泰现场反馈：取深色与浅色之间的中等蓝灰工作台风格 */
+body.coal-theme {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(90, 177, 235, 0.18), transparent 24%),
+    radial-gradient(circle at 82% 8%, rgba(57, 167, 139, 0.12), transparent 22%),
+    linear-gradient(180deg, #61798f 0%, #40566b 100%) !important;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page, .coal-page-v2, .business-page, .dispatch-page, .coal-page) {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(90, 177, 235, 0.17), transparent 26%),
+    radial-gradient(circle at 86% 8%, rgba(43, 213, 166, 0.12), transparent 22%),
+    linear-gradient(180deg, #61798f 0%, #40566b 100%) !important;
+  color: #f2f7fb !important;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page, .business-page, .dispatch-page)
+  :is(.page-hero, .panel, .kpi-card, .stat-card, .card, .section-card, .hero, .device-card, .fault-item, .shift-row, .flow-node, .suggestion, .fault, .balance-grid div) {
+  background: rgba(31, 48, 63, 0.9) !important;
+  border-color: rgba(236, 247, 255, 0.14) !important;
+  box-shadow: 0 18px 42px rgba(7, 16, 25, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+  color: #f2f7fb !important;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page, .business-page, .dispatch-page)
+  :is(h1, h2, h3, strong, b, .page-hero h1, .panel-head h2) {
+  color: #ffffff !important;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page, .business-page, .dispatch-page)
+  :is(p, span, small, label, .panel-head span, .page-hero p, .kpi-card span, .kpi-card small, .stat-card span, .stat-card small) {
+  color: rgba(231, 240, 247, 0.74) !important;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page, .business-page, .dispatch-page)
+  :is(.eyebrow, .section-tag, .kpi-card small, .stat-card small, .device-title span, .suggestion strong, .fault small) {
+  color: #9fe8ff !important;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page, .business-page, .dispatch-page) .el-table {
+  --el-table-header-bg-color: rgba(226, 237, 245, 0.12);
+  --el-table-row-hover-bg-color: rgba(155, 220, 255, 0.1);
+  --el-table-border-color: rgba(207, 226, 240, 0.16);
+  --el-table-text-color: #f2f7fb;
+  --el-table-header-text-color: #9bdcff;
+  background: rgba(31, 48, 63, 0.82) !important;
+  color: #f2f7fb !important;
+}

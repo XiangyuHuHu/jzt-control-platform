@@ -1,90 +1,16 @@
 <template>
-  <div class="home">
-    <el-header class="header">
-      <h1>智能管控平台</h1>
-    </el-header>
-    <el-main class="main">
-      <el-grid :cols="2" :gutter="20">
-        <el-grid-item>
-          <el-card class="menu-card" @click="navigate('/dashboard')">
-            <template #header>
-              <div class="card-header">
-                <span>数据概览</span>
-              </div>
-            </template>
-            <div class="card-content">
-              <i class="el-icon-data-analysis"></i>
-              <p>查看系统整体运行状态</p>
-            </div>
-          </el-card>
-        </el-grid-item>
-        <el-grid-item>
-          <el-card class="menu-card" @click="navigate('/monitor')">
-            <template #header>
-              <div class="card-header">
-                <span>实时监控</span>
-              </div>
-            </template>
-            <div class="card-content">
-              <i class="el-icon-video-camera"></i>
-              <p>查看设备实时运行数据</p>
-            </div>
-          </el-card>
-        </el-grid-item>
-        <el-grid-item>
-          <el-card class="menu-card" @click="navigate('/alarm')">
-            <template #header>
-              <div class="card-header">
-                <span>报警中心</span>
-              </div>
-            </template>
-            <div class="card-content">
-              <i class="el-icon-warning"></i>
-              <p>查看系统报警信息</p>
-            </div>
-          </el-card>
-        </el-grid-item>
-        <el-grid-item>
-          <el-card class="menu-card" @click="navigate('/device')">
-            <template #header>
-              <div class="card-header">
-                <span>设备管理</span>
-              </div>
-            </template>
-            <div class="card-content">
-              <i class="el-icon-s-tools"></i>
-              <p>查看设备台账信息</p>
-            </div>
-          </el-card>
-        </el-grid-item>
-        <el-grid-item>
-          <el-card class="menu-card" @click="navigate('/report')">
-            <template #header>
-              <div class="card-header">
-                <span>生产报表</span>
-              </div>
-            </template>
-            <div class="card-content">
-              <i class="el-icon-document"></i>
-              <p>查看生产和煤质报表</p>
-            </div>
-          </el-card>
-        </el-grid-item>
-        <el-grid-item>
-          <el-card class="menu-card" @click="navigate('/workorder')">
-            <template #header>
-              <div class="card-header">
-                <span>工单管理</span>
-              </div>
-            </template>
-            <div class="card-content">
-              <i class="el-icon-notebook-2"></i>
-              <p>查看设备工单信息</p>
-            </div>
-          </el-card>
-        </el-grid-item>
-      </el-grid>
-    </el-main>
+  <div class="mobile-home">
+    <header class="header">
+      <strong>金正泰管控平台</strong>
+      <span>移动端</span>
+    </header>
+
+    <main class="main">
+      <button v-for="item in menus" :key="item.path" type="button" class="menu-card" @click="navigate(item.path)">
+        <strong>{{ item.title }}</strong>
+        <span>{{ item.desc }}</span>
+      </button>
+    </main>
   </div>
 </template>
 
@@ -92,6 +18,14 @@
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const menus = [
+  { path: '/dashboard', title: '数据总览', desc: '生产、能耗、告警总览' },
+  { path: '/monitor', title: '实时监控', desc: '设备运行和现场状态' },
+  { path: '/alarm', title: '报警中心', desc: '异常报警和处理进度' },
+  { path: '/device', title: '设备管理', desc: '台账、电流、故障信息' },
+  { path: '/report', title: '报表中心', desc: '中文月份和星期查询' },
+  { path: '/workorder', title: '工单管理', desc: '检修和闭环任务' },
+]
 
 const navigate = (path: string) => {
   router.push(path)
@@ -99,67 +33,69 @@ const navigate = (path: string) => {
 </script>
 
 <style scoped>
-.home {
+.mobile-home {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  background: #edf2f7;
+  color: #17212b;
 }
 
 .header {
-  background-color: #409EFF;
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #1d2b38;
+  color: #fff;
 }
 
-.header h1 {
-  margin: 0;
-  font-size: 1.5rem;
+.header strong {
+  font-size: 18px;
+}
+
+.header span {
+  color: #9ddfff;
+  font-size: 13px;
 }
 
 .main {
-  flex: 1;
-  padding: 1rem;
-  background-color: #f5f7fa;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 14px;
 }
 
 .menu-card {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  height: 120px;
+  min-height: 118px;
+  padding: 16px;
+  border: 1px solid #d7e0e8;
+  border-radius: 10px;
+  background: #fff;
+  color: #17212b;
+  text-align: left;
+  box-shadow: 0 8px 22px rgba(25, 38, 52, 0.08);
 }
 
-.menu-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+.menu-card strong,
+.menu-card span {
+  display: block;
 }
 
-.card-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
+.menu-card strong {
+  font-size: 17px;
 }
 
-.card-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 80px;
+.menu-card span {
+  margin-top: 10px;
+  color: #607080;
+  line-height: 1.45;
 }
 
-.card-content i {
-  font-size: 2rem;
-  color: #409EFF;
-  margin-bottom: 0.5rem;
-}
-
-.card-content p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #606266;
-  text-align: center;
+@media (max-width: 420px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

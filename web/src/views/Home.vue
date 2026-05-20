@@ -3,7 +3,7 @@
     <header class="hero-shell">
       <div class="hero-copy">
         <p class="eyebrow">Coal Operations Command</p>
-        <img src="/logo-sdny.png" alt="山东能源集团" class="hero-logo" />
+        <img :src="jinhaizediLogo" alt="金海泽地" class="hero-logo" />
         <h1>金海泽地选煤厂综合管控平台</h1>
         <p class="hero-summary">旧版业务风入口，侧重表格、台账、录入和报表，适合功能核对与流程演示。</p>
         <div class="hero-actions">
@@ -89,6 +89,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
+import jinhaizediLogo from '../assets/jinhaizedi-logo.svg'
 
 const currentTime = ref('')
 const currentDate = ref('')
@@ -108,7 +109,7 @@ const primaryEntries = [
 
 const topicEntries = [
   { path: '/coal/storage', title: '储装管理', desc: '入厂、销售、装车和库存' },
-  { path: '/coal/energy', title: '能耗管理', desc: '水、电、介质、药剂对比' },
+  { path: '/coal/energy', title: '消耗大屏', desc: '水、电、介质、药剂对比' },
   { path: '/coal/dispatch', title: '调度管理', desc: '当班事项、事故记录和遗留问题' },
   { path: '/coal/decision', title: '智能决策', desc: '工艺评估、预测与建议输出' },
   { path: '/coal/monitor', title: '平台监测', desc: '人员、环境、接口与性能监测' },

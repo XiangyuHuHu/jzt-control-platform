@@ -67,10 +67,16 @@ public class DataChangeHandler {
 
     public void refreshTagCache() {
         tagCache.clear();
+        int ns = iotProperties.getKepserver().getOpcuaNamespaceIndex();
         tagRepo.findAll().forEach(tag -> {
             String path = tag.getSourcePath();
             if (path != null && !path.isBlank()) {
                 tagCache.put(path, tag);
+                KepserverNodeIdParser.identifier(path).ifPresent(identifier -> {
+                    tagCache.put(identifier, tag);
+                    tagCache.put(KepserverNodeIdParser.kepString(ns, identifier), tag);
+                    tagCache.put(KepserverNodeIdParser.opcuaString(ns, identifier), tag);
+                });
             }
         });
         log.info("已加载 {} 个点位到标签缓存", tagCache.size());
@@ -176,11 +182,13 @@ public class DataChangeHandler {
     }
 
     private IotTagEntity resolveTag(String nodeId) {
-        String sourcePath = nodeId;
-        if (nodeId.contains(";s=")) {
-            sourcePath = nodeId.substring(nodeId.indexOf(";s=") + 3);
+        IotTagEntity tag = tagCache.get(nodeId);
+        if (tag != null) {
+            return tag;
         }
-        return tagCache.get(sourcePath);
+        return KepserverNodeIdParser.identifier(nodeId)
+                .map(tagCache::get)
+                .orElse(null);
     }
 
     private Double extractDouble(Variant variant) {

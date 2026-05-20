@@ -71,7 +71,7 @@ public class OpcUaBootstrap {
         int ns = iotProperties.getKepserver().getOpcuaNamespaceIndex();
         List<NodeId> nodeIds = enabledTags.stream()
                 .filter(tag -> tag.getSourcePath() != null && !tag.getSourcePath().isBlank())
-                .map(tag -> new NodeId(ns, tag.getSourcePath()))
+                .map(tag -> KepserverNodeIdParser.parse(tag.getSourcePath(), ns))
                 .toList();
 
         if (nodeIds.isEmpty()) {

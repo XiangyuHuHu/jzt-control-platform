@@ -36,9 +36,16 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
+type RealtimePoint = {
+  id: string | number
+  pointName?: string
+  value: string | number
+  collectionTime: string
+}
+
 const router = useRouter()
 const loading = ref(true)
-const realTimeData = ref({ deviceData: [] })
+const realTimeData = ref<{ deviceData: RealtimePoint[] }>({ deviceData: [] })
 let interval: number | null = null
 
 const goBack = () => {

@@ -37,9 +37,17 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
+type WorkOrderRow = {
+  id: string | number
+  title: string
+  orderNo: string
+  createdAt: string
+  status: string
+}
+
 const router = useRouter()
 const loading = ref(true)
-const recentWorkOrders = ref({ workOrders: [] })
+const recentWorkOrders = ref<{ workOrders: WorkOrderRow[] }>({ workOrders: [] })
 
 const goBack = () => {
   router.push('/')

@@ -249,6 +249,67 @@ export interface ProcessFlowDto {
   updateTime: string
 }
 
+export interface SmartDensityUnitDto {
+  unit: string
+  area: string
+  status: string
+  density: string
+  diverter: string
+  water: string
+  mode: string
+}
+
+export interface SmartDensitySetpointDto {
+  predMiddlingDensity: number
+  predCleanDensity: number
+  mode: string
+}
+
+export interface SmartDensityPredictRequest {
+  unit: string
+  dataLong: number[]
+  dataShort: number[]
+  params: Record<string, any>
+}
+
+export interface SmartDensityPredictResult {
+  unit: string
+  predDiverter: number
+  predWater: number
+  predDensity: number
+  state: number
+  stateName: string
+  mode: string
+}
+
+export interface SmartReagentUnitDto {
+  unit: string
+  area: string
+  status: string
+  pump: string
+  backupPump: string
+  valve: string
+  mode: string
+}
+
+export interface SmartReagentPredictRequest {
+  unit: string
+  dataLong: number[]
+  dataShort: number[]
+  params: Record<string, any>
+}
+
+export interface SmartReagentPredictResult {
+  unit: string
+  predPump: number
+  numPump: number
+  predBackupPump: number
+  valveMN: number
+  state: number
+  stateName: string
+  mode: string
+}
+
 const buildQuery = (params: Record<string, string | number | boolean | undefined | null>) => {
   const query = new URLSearchParams()
   Object.entries(params).forEach(([key, value]) => {
@@ -507,3 +568,27 @@ export const listSafetyHealth = (params: {
 export const listProcessFlow = (params: {
   status?: string
 } = {}) => request<ProcessFlowDto[]>(`/api/process-flow/list${buildQuery(params)}`)
+
+export const getSmartDensityOverview = () =>
+  request<{ units: SmartDensityUnitDto[]; setpoint: SmartDensitySetpointDto }>('/api/smart-density/overview')
+
+export const predictSmartDensity = (payload: SmartDensityPredictRequest) =>
+  request<SmartDensityPredictResult>('/api/smart-density/predict', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+
+export const predictSmartDensitySetpoint = (payload: { data: number[] }) =>
+  request<SmartDensitySetpointDto>('/api/smart-density/predict-setpoint', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+
+export const getSmartReagentOverview = () =>
+  request<{ units: SmartReagentUnitDto[] }>('/api/smart-reagent/overview')
+
+export const predictSmartReagent = (payload: SmartReagentPredictRequest) =>
+  request<SmartReagentPredictResult>('/api/smart-reagent/predict', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })

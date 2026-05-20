@@ -67,9 +67,14 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
+type DeviceStats = {
+  statusDistribution: Record<string, number>
+  typeDistribution: Record<string, number>
+}
+
 const router = useRouter()
 const loading = ref(true)
-const deviceStats = ref({ statusDistribution: {}, typeDistribution: {} })
+const deviceStats = ref<DeviceStats>({ statusDistribution: {}, typeDistribution: {} })
 
 const goBack = () => {
   router.push('/')

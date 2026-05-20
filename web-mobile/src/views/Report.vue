@@ -77,11 +77,26 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
+type ProductionStats = {
+  todayProduction?: number
+  weekProduction?: number
+  monthProduction?: number
+}
+
+type EnergyStats = {
+  todayEnergy?: number
+}
+
+type TrendData = {
+  data: Array<string | number>
+  labels: string[]
+}
+
 const router = useRouter()
 const loading = ref(true)
-const productionStats = ref({})
-const energyStats = ref({})
-const trendData = ref({ data: [], labels: [] })
+const productionStats = ref<ProductionStats>({})
+const energyStats = ref<EnergyStats>({})
+const trendData = ref<TrendData>({ data: [], labels: [] })
 const timeRange = ref('day')
 
 const goBack = () => {

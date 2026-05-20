@@ -104,11 +104,32 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
+type Overview = {
+  totalDevices?: number
+  runningDevices?: number
+  totalAlarms?: number
+  unhandledAlarms?: number
+  pendingWorkOrders?: number
+}
+
+type ProductionStats = {
+  todayProduction?: number
+  weekProduction?: number
+  monthProduction?: number
+}
+
+type AlarmRow = {
+  id: string | number
+  alarmName: string
+  createdAt: string
+  level: string
+}
+
 const router = useRouter()
 const loading = ref(true)
-const overview = ref({})
-const productionStats = ref({})
-const recentAlarms = ref({ alarms: [] })
+const overview = ref<Overview>({})
+const productionStats = ref<ProductionStats>({})
+const recentAlarms = ref<{ alarms: AlarmRow[] }>({ alarms: [] })
 
 const goBack = () => {
   router.push('/')

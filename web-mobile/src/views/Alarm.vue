@@ -71,10 +71,23 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
+type AlarmStats = {
+  levelDistribution: Record<string, number>
+  statusDistribution: Record<string, number>
+}
+
+type AlarmRow = {
+  id: string | number
+  alarmName: string
+  deviceName?: string
+  createdAt: string
+  level: string
+}
+
 const router = useRouter()
 const loading = ref(true)
-const alarmStats = ref({ levelDistribution: {}, statusDistribution: {} })
-const recentAlarms = ref({ alarms: [] })
+const alarmStats = ref<AlarmStats>({ levelDistribution: {}, statusDistribution: {} })
+const recentAlarms = ref<{ alarms: AlarmRow[] }>({ alarms: [] })
 
 const goBack = () => {
   router.push('/')
