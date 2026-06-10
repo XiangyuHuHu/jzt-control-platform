@@ -111,16 +111,17 @@ docker compose up -d
 
 注意：离线导入镜像后，不需要再 `--build`。
 
-## 4. 默认端口
+## 4. 默认端口（金正泰 `coal-platform-jzt`）
 
-- 前端：`80`
-- 后端：`8080`
-- PostgreSQL：`5432`
+- 前端：`81`（`.env.docker` 中 `WEB_PORT`）
+- 后端直连：`8081`（`SERVER_PORT`）
+- PostgreSQL：`5433`（`POSTGRES_PORT`）
 
 默认访问：
-- 前端：`http://localhost`
-- 后端：`http://localhost:8080/api`
-- IOT provider 状态：`http://localhost:8080/api/iot/provider/status`
+- 管控平台：`http://localhost:81/coal`
+- API（经 Nginx）：`http://localhost:81/api`
+- 后端直连：`http://localhost:8081/api`
+- IOT provider 状态：`http://localhost:8081/api/iot/provider/status`
 
 ## 5. KEPServer 连接说明
 

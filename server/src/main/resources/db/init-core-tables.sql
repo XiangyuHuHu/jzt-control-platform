@@ -46,6 +46,59 @@ CREATE TABLE IF NOT EXISTS energy_consumption (
 
 CREATE INDEX IF NOT EXISTS idx_energy_consumption_record_date ON energy_consumption(record_date);
 
+CREATE TABLE IF NOT EXISTS dispatch_record (
+    id BIGSERIAL PRIMARY KEY,
+    record_no VARCHAR(64) NOT NULL,
+    shift VARCHAR(32),
+    record_type VARCHAR(64),
+    content TEXT,
+    handling TEXT,
+    recorder VARCHAR(64),
+    record_time TIMESTAMP,
+    handler VARCHAR(64),
+    handle_time TIMESTAMP,
+    status VARCHAR(32),
+    priority VARCHAR(32),
+    attachment_url TEXT,
+    create_by VARCHAR(64),
+    create_time TIMESTAMP DEFAULT now(),
+    update_by VARCHAR(64),
+    update_time TIMESTAMP DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS uk_dispatch_record_record_no ON dispatch_record(record_no);
+CREATE INDEX IF NOT EXISTS idx_dispatch_record_record_time ON dispatch_record(record_time);
+CREATE INDEX IF NOT EXISTS idx_dispatch_record_status ON dispatch_record(status);
+
+CREATE TABLE IF NOT EXISTS storage_transport (
+    id BIGSERIAL PRIMARY KEY,
+    record_type VARCHAR(64) NOT NULL,
+    record_no VARCHAR(64) NOT NULL,
+    coal_type VARCHAR(128),
+    quantity DOUBLE PRECISION,
+    record_time TIMESTAMP,
+    source_or_dest VARCHAR(255),
+    transport_mode VARCHAR(32),
+    vehicle_no VARCHAR(64),
+    loading_station VARCHAR(128),
+    train_no VARCHAR(64),
+    carriage_count INTEGER,
+    customer_name VARCHAR(128),
+    contract_no VARCHAR(128),
+    quality_index TEXT,
+    operator VARCHAR(64),
+    status VARCHAR(32),
+    remark TEXT,
+    create_by VARCHAR(64),
+    create_time TIMESTAMP DEFAULT now(),
+    update_by VARCHAR(64),
+    update_time TIMESTAMP DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS uk_storage_transport_record_no ON storage_transport(record_no);
+CREATE INDEX IF NOT EXISTS idx_storage_transport_record_time ON storage_transport(record_time);
+CREATE INDEX IF NOT EXISTS idx_storage_transport_record_type ON storage_transport(record_type);
+
 INSERT INTO work_order (
     order_no, title, description, type, priority, status,
     device_id, assignee_id, creator_id,

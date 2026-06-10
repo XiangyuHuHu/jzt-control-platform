@@ -4,11 +4,13 @@ import {
   GaugeChart,
   LineChart,
   PieChart,
+  RadarChart,
   ScatterChart,
 } from 'echarts/charts'
 import {
   GridComponent,
   LegendComponent,
+  RadarComponent,
   TooltipComponent,
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
@@ -20,6 +22,8 @@ echarts.use([
   LegendComponent,
   LineChart,
   PieChart,
+  RadarChart,
+  RadarComponent,
   ScatterChart,
   TooltipComponent,
   CanvasRenderer,

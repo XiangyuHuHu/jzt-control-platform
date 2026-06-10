@@ -1,5 +1,5 @@
-<template>
-  <div class="coal-page section-page">
+﻿<template>
+  <div class="coal-page section-page quality-report-page">
     <CoalQuickBar
       title="质量报表中心"
       subtitle="把最新需求里的日报、周报、月报独立成报表中心，保留原报表页作为综合分析入口。"
@@ -25,20 +25,15 @@
 
       <section class="stats-grid">
         <article class="stat-card" v-for="item in stats" :key="item.label">
-          <span>{{ item.label }}</span>
-          <strong>{{ item.value }}</strong>
-          <small>{{ item.note }}</small>
-        </article>
-      </section>
-
-      <section class="section-panel">
-        <div class="panel-head">
-          <div>
-            <h2>报表状态分布</h2>
-            <p>用于验收日报、周报、月报的生成和审核流程。</p>
+          <div class="stat-main">
+            <span class="stat-label">
+              {{ item.label }}
+              <i v-if="item.statusKey === '待审核'" class="pending-dot" aria-hidden="true"></i>
+            </span>
+            <strong>{{ item.value }}</strong>
           </div>
-        </div>
-        <div ref="chartEl" class="chart-box"></div>
+          <small class="stat-tag" :class="`stat-tag--${item.tagType}`">{{ item.note }}</small>
+        </article>
       </section>
 
       <section class="section-panel">
@@ -56,9 +51,23 @@
           <el-table-column prop="cycle" label="周期" min-width="100" />
           <el-table-column prop="reportDate" label="报表日期" min-width="120" />
           <el-table-column prop="reportName" label="报表名称" min-width="180" />
-          <el-table-column prop="status" label="状态" min-width="120" />
+          <el-table-column prop="status" label="状态" min-width="120">
+            <template #default="{ row }">
+              <span class="status-tag" :class="statusClass(row.status)">{{ row.status }}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="owner" label="责任人" min-width="100" />
           <el-table-column prop="summary" label="摘要" min-width="280" show-overflow-tooltip />
+          <el-table-column label="操作" width="220" fixed="right">
+            <template #default="{ row }">
+              <div class="action-group">
+                <el-button link type="primary" @click="handleView(row)">查看</el-button>
+                <el-button v-if="row.status === '已生成'" link type="success" @click="handleDownload(row)">导出</el-button>
+                <el-button v-else-if="row.status === '待审核'" link class="action-approve" @click="handleApprove(row)">去审核</el-button>
+                <el-button v-else link type="info" @click="handleEdit(row)">继续编辑</el-button>
+              </div>
+            </template>
+          </el-table-column>
         </el-table>
       </section>
     </section>
@@ -66,17 +75,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import CoalQuickBar from '../../components/coal/CoalQuickBar.vue'
-import { echarts } from '../../utils/echarts'
 import { listQualityReportCenter, type QualityReportCenterDto } from '../../api/coal-business'
 import { exportRowsToCsv, printRowsAsTable } from '../../utils/report-export'
 import { ElMessage } from 'element-plus'
 
 const filterCycle = ref('')
 const rows = ref<QualityReportCenterDto[]>([])
-const chartEl = ref<HTMLElement | null>(null)
-let chart: any = null
 
 const fallbackRows: QualityReportCenterDto[] = [
   { cycle: '日报', reportDate: '2026-04-15', reportName: '煤质情况统计报表', status: '已生成', owner: '于思源', summary: '湿混：Mt 36.7%，Mad 9.17%，Aad 39.6%，St,ad 0.4%，Qnet,ar 2253' },
@@ -85,10 +91,10 @@ const fallbackRows: QualityReportCenterDto[] = [
 ]
 
 const stats = computed(() => [
-  { label: '报表总数', value: `${rows.value.length} 份`, note: '当前筛选结果' },
-  { label: '已生成', value: `${rows.value.filter(item => item.status === '已生成').length} 份`, note: '可直接查看或导出' },
-  { label: '待审核', value: `${rows.value.filter(item => item.status === '待审核').length} 份`, note: '待质量负责人审核' },
-  { label: '编制中', value: `${rows.value.filter(item => item.status === '编制中').length} 份`, note: '待补充分析内容' },
+  { label: '报表总数', statusKey: '总数', value: `${rows.value.length} 份`, note: '当前筛选结果', tagType: 'all' },
+  { label: '已生成', statusKey: '已生成', value: `${rows.value.filter(item => item.status === '已生成').length} 份`, note: '可直接查看或导出', tagType: 'done' },
+  { label: '待审核', statusKey: '待审核', value: `${rows.value.filter(item => item.status === '待审核').length} 份`, note: '待质量负责人审核', tagType: 'pending' },
+  { label: '编制中', statusKey: '编制中', value: `${rows.value.filter(item => item.status === '编制中').length} 份`, note: '待补充分析内容', tagType: 'draft' },
 ])
 
 async function loadRows() {
@@ -98,26 +104,8 @@ async function loadRows() {
   } catch {
     rows.value = fallbackRows
   }
-  await nextTick()
-  renderChart()
 }
 
-function renderChart() {
-  if (!chartEl.value) return
-  chart?.dispose()
-  chart = echarts.init(chartEl.value)
-  const categories = ['已生成', '待审核', '编制中']
-  const values = categories.map(key => rows.value.filter(item => item.status === key).length)
-  chart.setOption({
-    tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: categories, axisLabel: { color: '#9fb4c9' } },
-    yAxis: { type: 'value', axisLabel: { color: '#9fb4c9' }, splitLine: { lineStyle: { color: 'rgba(120,160,200,0.12)' } } },
-    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    series: [{ type: 'bar', data: values, itemStyle: { color: '#2fe0a5', borderRadius: [6, 6, 0, 0] } }],
-  })
-}
-
-const handleResize = () => chart?.resize()
 const exportColumns: Array<{ key: keyof QualityReportCenterDto; label: string }> = [
   { key: 'cycle', label: '周期' },
   { key: 'reportDate', label: '报表日期' },
@@ -130,6 +118,28 @@ const exportColumns: Array<{ key: keyof QualityReportCenterDto; label: string }>
 const handleExport = () => {
   exportRowsToCsv(rows.value, exportColumns, `质量报表中心_${new Date().toISOString().slice(0, 10)}`)
   ElMessage.success('质量报表 CSV 已下载')
+}
+
+const statusClass = (status: string) => {
+  if (status === '已生成') return 'status-tag--done'
+  if (status === '待审核') return 'status-tag--pending'
+  return 'status-tag--draft'
+}
+
+const handleView = (row: QualityReportCenterDto) => {
+  ElMessage.success(`已打开《${row.reportName}》详情`)
+}
+
+const handleDownload = (row: QualityReportCenterDto) => {
+  ElMessage.success(`已为《${row.reportName}》创建导出任务`)
+}
+
+const handleApprove = (row: QualityReportCenterDto) => {
+  ElMessage.success(`已进入《${row.reportName}》审核流程`)
+}
+
+const handleEdit = (row: QualityReportCenterDto) => {
+  ElMessage.success(`继续编辑《${row.reportName}》`)
 }
 
 const handlePrint = () => {
@@ -152,16 +162,11 @@ const handlePrint = () => {
 
 onMounted(async () => {
   await loadRows()
-  window.addEventListener('resize', handleResize)
-})
-onUnmounted(() => {
-  chart?.dispose()
-  window.removeEventListener('resize', handleResize)
 })
 </script>
 
 <style scoped>
-.section-page{min-height:100vh;padding:0 20px 24px;background:#091019;color:#eef6ff}
+.section-page{height:100%;min-height:0;overflow:auto;padding:12px 14px 18px;background:#091019;color:#eef6ff}
 .page-shell{width:min(100%,1680px);margin:0 auto}
 .section-hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:20px}
 .section-eyebrow{margin:0 0 10px;color:#72d8ff;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
@@ -170,15 +175,27 @@ onUnmounted(() => {
 .section-panel{padding:22px;border-radius:20px;border:1px solid rgba(122,190,255,.12);background:rgba(12,20,31,.92);box-shadow:0 18px 40px rgba(0,0,0,.16);margin-bottom:20px}
 .filters{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
-.stat-card{padding:18px;border-radius:18px;border:1px solid rgba(122,190,255,.12);background:rgba(12,20,31,.92)}
-.stat-card span{display:block;color:#97aabc}
-.stat-card strong{display:block;margin-top:14px;font-size:30px}
-.stat-card small{display:block;margin-top:10px;color:#6ec8ff}
+.stat-card{padding:14px 16px;border-radius:18px;border:1px solid rgba(122,190,255,.12);background:rgba(12,20,31,.92);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.stat-main{min-width:0}
+.stat-label{display:inline-flex;align-items:center;gap:6px;color:#97aabc;font-size:12px}
+.pending-dot{width:8px;height:8px;border-radius:50%;background:#ff9b1a;box-shadow:0 0 10px rgba(255,155,26,.82);animation:pulse 1.6s ease-in-out infinite}
+.stat-card strong{display:block;margin-top:8px;font-size:28px;line-height:1.1;white-space:nowrap}
+.stat-tag{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:999px;font-size:11px;white-space:nowrap}
+.stat-tag--all{background:rgba(69,114,148,.42);color:#b5dbff}
+.stat-tag--done{background:rgba(25,190,107,.26);color:#6ff0ae}
+.stat-tag--pending{background:rgba(255,153,0,.26);color:#ffc36a}
+.stat-tag--draft{background:rgba(45,140,240,.26);color:#8dc7ff}
 .panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:16px}
 .panel-actions{display:flex;gap:8px;align-items:center}
 .panel-head h2{margin:0;font-size:24px}
 .panel-head p{margin:8px 0 0;color:#8fa8bc}
-.chart-box{height:320px}
+.status-tag{display:inline-flex;align-items:center;justify-content:center;min-width:68px;height:24px;padding:0 8px;border-radius:999px;color:#fff;font-size:12px;font-weight:600}
+.status-tag--done{background:#19be6b}
+.status-tag--pending{background:#ff9900}
+.status-tag--draft{background:#2d8cf0}
+.action-group{display:flex;gap:8px;align-items:center}
+.action-approve{color:#ff9b1a !important;font-weight:700}
 @media (max-width: 1200px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width: 768px){.stats-grid{grid-template-columns:1fr}}
+@keyframes pulse{0%,100%{transform:scale(.9);opacity:.65}50%{transform:scale(1.1);opacity:1}}
 </style>

@@ -1,18 +1,16 @@
-<template>
+﻿<template>
   <div class="equipment-screen">
     <section class="screen-header">
-      <div class="header-side">
-        <span>{{ weather.city }}</span>
-        <strong>{{ weather.temp }}</strong>
-        <span>{{ weather.text }}</span>
+      <div class="header-main">
+        <p class="header-tag">设备管理</p>
+        <h1>设备管理看板</h1>
+        <p class="header-desc">统一展示设备状态、告警历史、在线监控与润滑维修台账。</p>
       </div>
-      <div class="header-title">
-        <h1>设备管理</h1>
-      </div>
-      <div class="header-side header-side--right">
-        <span>设备总数</span>
-        <strong>209</strong>
-        <span>在线监控 71 台</span>
+      <div class="header-side--right">
+        <span class="runtime-chip">{{ weather.city }} {{ weather.temp }} {{ weather.text }}</span>
+        <span class="runtime-chip">设备总数 209</span>
+        <span class="runtime-chip">在线监控 71 台</span>
+        <button type="button" class="ghost-btn" @click="showLedger = true">台账树</button>
       </div>
     </section>
 
@@ -447,15 +445,15 @@ const renderCharts = () => {
       series: [
         {
           type: 'pie',
-          radius: ['52%', '74%'],
+          radius: ['58%', '70%'],
           center: ['35%', '46%'],
           data: [
-            { value: 209, name: '在用', itemStyle: { color: '#7087e6' } },
-            { value: 0, name: '备用', itemStyle: { color: '#92d166' } },
-            { value: 0, name: '报废', itemStyle: { color: '#f5c45d' } },
-            { value: 0, name: '维修', itemStyle: { color: '#f36d6d' } },
+            { value: 209, name: '在用', itemStyle: { color: '#80a9c6' } },
+            { value: 0, name: '备用', itemStyle: { color: '#8ca8a0' } },
+            { value: 0, name: '报废', itemStyle: { color: '#b7a78a' } },
+            { value: 0, name: '维修', itemStyle: { color: '#b48f8f' } },
           ],
-          label: { color: '#dbe7ff' },
+          label: { color: '#dbe7ff', fontSize: 12 },
         },
       ],
     })
@@ -467,16 +465,17 @@ const renderCharts = () => {
       series: [
         {
           type: 'pie',
-          radius: ['58%', '78%'],
+          radius: ['60%', '72%'],
           center: ['50%', '50%'],
+          avoidLabelOverlap: true,
           data: [
-            { value: 355, name: '忽略', itemStyle: { color: '#45cbff' } },
-            { value: 18, name: '关注', itemStyle: { color: '#6883d2' } },
+            { value: 355, name: '在线', itemStyle: { color: '#79b8d6' } },
+            { value: 18, name: '离线', itemStyle: { color: '#4c647f' } },
           ],
           label: {
-            color: '#eaf6ff',
-            formatter: '{c}\n{name}',
-            fontSize: 14,
+            color: '#d8e5f0',
+            formatter: '{c}\n{b}',
+            fontSize: 12,
           },
         },
       ],
@@ -489,16 +488,17 @@ const renderCharts = () => {
       series: [
         {
           type: 'pie',
-          radius: ['58%', '78%'],
+          radius: ['60%', '72%'],
           center: ['50%', '50%'],
+          avoidLabelOverlap: true,
           data: [
-            { value: 2, name: '一般', itemStyle: { color: '#45cbff' } },
-            { value: 1, name: '严重', itemStyle: { color: '#6883d2' } },
+            { value: 2, name: '一般', itemStyle: { color: '#8fb5cf' } },
+            { value: 1, name: '严重', itemStyle: { color: '#d28d8d' } },
           ],
           label: {
-            color: '#eaf6ff',
-            formatter: '{c}\n{name}',
-            fontSize: 14,
+            color: '#d8e5f0',
+            formatter: '{c}\n{b}',
+            fontSize: 12,
           },
         },
       ],
@@ -553,12 +553,13 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .equipment-screen {
-  min-height: 100vh;
-  padding: 24px 0 32px;
+  height: 100%;
+  overflow: hidden;
+  padding: 14px 0 18px;
   background:
-    radial-gradient(circle at center, rgba(32, 88, 144, 0.18), transparent 26%),
-    radial-gradient(circle at top, rgba(39, 182, 255, 0.1), transparent 20%),
-    #040914;
+    radial-gradient(circle at 18% 8%, rgba(86, 132, 170, 0.1), transparent 22%),
+    radial-gradient(circle at 82% 10%, rgba(108, 153, 191, 0.08), transparent 20%),
+    #121a26;
   color: #eaf6ff;
 }
 
@@ -569,65 +570,91 @@ onBeforeUnmount(() => {
 }
 
 .screen-header {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr 1fr;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.header-side {
   display: flex;
-  gap: 16px;
+  justify-content: space-between;
   align-items: center;
-  font-size: 16px;
-  color: rgba(234, 246, 255, 0.88);
+  gap: 18px;
+  margin-bottom: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(182, 204, 224, 0.18);
+  border-radius: 10px;
+  background: rgba(24, 34, 48, 0.92);
 }
 
-.header-side strong {
-  font-size: 28px;
+.header-main {
+  min-width: 0;
+}
+
+.header-tag {
+  margin: 0 0 4px;
+  color: #9bc3de;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.header-main h1 {
+  margin: 0;
+  font-size: 22px;
+  color: #f0f6fb;
+  letter-spacing: 0.01em;
+}
+
+.header-desc {
+  margin: 4px 0 0;
+  color: rgba(207, 221, 232, 0.72);
+  font-size: 12px;
 }
 
 .header-side--right {
+  display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.header-title {
-  text-align: center;
+.runtime-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid rgba(173, 198, 221, 0.24);
+  border-radius: 999px;
+  background: rgba(34, 49, 67, 0.76);
+  color: #cfdfeb;
+  font-size: 12px;
 }
 
-.header-title h1 {
-  margin: 0;
-  font-size: 54px;
-  letter-spacing: 0.08em;
-  color: #14dfff;
-  text-shadow: 0 0 24px rgba(20, 223, 255, 0.35);
+.ghost-btn {
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid rgba(161, 192, 220, 0.34);
+  border-radius: 8px;
+  background: transparent;
+  color: #d8e7f3;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .screen-grid {
   display: grid;
   grid-template-columns: 0.72fr 1.44fr 0.72fr;
-  grid-template-rows: 458px 460px;
+  grid-template-rows: 448px 446px;
   gap: 10px;
 }
 
 .panel {
   position: relative;
-  border: 1px solid rgba(40, 184, 255, 0.58);
-  background:
-    linear-gradient(180deg, rgba(8, 18, 41, 0.94), rgba(3, 8, 20, 0.92)),
-    rgba(4, 9, 20, 0.94);
-  box-shadow: inset 0 0 28px rgba(0, 180, 255, 0.08);
+  border: 1px solid rgba(181, 204, 223, 0.18);
+  border-radius: 10px;
+  background: rgba(25, 36, 50, 0.94);
+  box-shadow: 0 10px 24px rgba(6, 12, 20, 0.18);
   overflow: hidden;
 }
 
 .panel::before,
 .panel::after {
-  content: '';
-  position: absolute;
-  width: 70px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #31e7ff);
-  top: 10px;
+  content: none;
 }
 
 .panel::before {
@@ -639,9 +666,9 @@ onBeforeUnmount(() => {
 }
 
 .panel-title {
-  padding: 16px 18px 8px;
-  color: #12e3ff;
-  font-size: 18px;
+  padding: 14px 16px 8px;
+  color: #e9f2f9;
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -674,17 +701,17 @@ onBeforeUnmount(() => {
 }
 
 .mini-table thead th {
-  background: rgba(112, 138, 230, 0.9);
-  color: #fff;
-  font-size: 14px;
+  background: rgba(36, 52, 69, 0.86);
+  color: #8dc2e4;
+  font-size: 13px;
 }
 
 .mini-table tbody tr:nth-child(odd) {
-  background: rgba(17, 37, 83, 0.88);
+  background: rgba(28, 41, 58, 0.85);
 }
 
 .mini-table tbody tr:nth-child(even) {
-  background: rgba(10, 27, 63, 0.88);
+  background: rgba(23, 34, 48, 0.9);
 }
 
 .panel--main {
@@ -713,8 +740,8 @@ onBeforeUnmount(() => {
 }
 
 .monitor-title {
-  color: #19deff;
-  font-size: 18px;
+  color: #d9e6f2;
+  font-size: 15px;
   font-weight: 700;
 }
 
@@ -723,15 +750,17 @@ onBeforeUnmount(() => {
   grid-template-columns: 70px 1fr;
   align-items: center;
   gap: 16px;
-  padding: 18px;
-  border: 6px solid #1ad9ff;
-  border-radius: 16px;
+  padding: 14px;
+  border: 1px solid rgba(166, 193, 216, 0.3);
+  border-radius: 10px;
+  background: rgba(37, 52, 70, 0.72);
   min-height: 130px;
 }
 
 .monitor-progress strong {
-  font-size: 54px;
+  font-size: 42px;
   text-align: center;
+  color: #f0f5fa;
 }
 
 .monitor-bars {
@@ -742,7 +771,7 @@ onBeforeUnmount(() => {
 }
 
 .monitor-bars span {
-  background: linear-gradient(180deg, #26e9ff, #1ec1d8);
+  background: linear-gradient(180deg, #8faec7, #5c7f9e);
 }
 
 .equipment-kpis {
@@ -753,30 +782,30 @@ onBeforeUnmount(() => {
 
 .kpi span {
   display: block;
-  color: #49ecff;
-  font-size: 15px;
+  color: #9cb9cf;
+  font-size: 13px;
 }
 
 .kpi strong {
   display: block;
-  margin-top: 10px;
-  font-size: 32px;
+  margin-top: 8px;
+  font-size: 26px;
 }
 
 .kpi .gold {
-  color: #ffd15d;
+  color: #d8c3a0;
 }
 
 .kpi .orange {
-  color: #ff8f3d;
+  color: #c9a88a;
 }
 
 .kpi .cyan {
-  color: #3cecff;
+  color: #9cc0d8;
 }
 
 .kpi .red {
-  color: #ff2e2e;
+  color: #cf9da0;
 }
 
 .rank-list {
@@ -794,8 +823,8 @@ onBeforeUnmount(() => {
 }
 
 .rank-top span {
-  color: #246dff;
-  font-size: 18px;
+  color: #89aac4;
+  font-size: 15px;
 }
 
 .rank-top strong,
@@ -805,12 +834,12 @@ onBeforeUnmount(() => {
 
 .rank-bar {
   height: 8px;
-  background: rgba(19, 54, 116, 0.8);
+  background: rgba(44, 62, 82, 0.82);
 }
 
 .rank-bar div {
   height: 100%;
-  background: linear-gradient(90deg, #1264ff, #34a2ff);
+  background: linear-gradient(90deg, #6f9ec5, #89b4d8);
 }
 
 .panel--wide {
@@ -824,7 +853,7 @@ onBeforeUnmount(() => {
 }
 
 .split-block {
-  border-left: 1px solid rgba(52, 177, 255, 0.18);
+  border-left: 1px solid rgba(173, 196, 218, 0.14);
   padding: 0 10px;
 }
 
@@ -842,14 +871,14 @@ onBeforeUnmount(() => {
   margin-top: 110px;
   width: 120px;
   height: 238px;
-  border: 4px solid #2ce6ff;
-  border-radius: 20px;
+  border: 1px solid rgba(160, 188, 210, 0.34);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
-  color: #2ce6ff;
-  background: rgba(31, 217, 255, 0.16);
+  font-size: 26px;
+  color: #c5d8e7;
+  background: rgba(40, 56, 74, 0.62);
 }
 
 .blue-dialog :deep(.el-dialog) {

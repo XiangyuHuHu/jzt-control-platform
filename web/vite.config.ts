@@ -5,6 +5,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.VITE_PUBLIC_BASE || '/',
   plugins: [
     vue(),
     Components({

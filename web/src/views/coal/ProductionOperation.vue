@@ -1,5 +1,5 @@
-<template>
-  <div class="coal-page section-page">
+﻿<template>
+  <div class="coal-page section-page production-operation-page">
     <CoalQuickBar
       title="生产运行统计"
       subtitle="对应最新需求中的生产运行统计、生产数据概览和运行分析评价，先以统计页落地完整入口和字段。"
@@ -138,7 +138,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.section-page{min-height:100vh;padding:0 20px 24px;background:#091019;color:#eef6ff}
+.section-page{height:100%;overflow:hidden;padding:0;background:#091019;color:#eef6ff}
 .page-shell{width:min(100%,1680px);margin:0 auto}
 .section-hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:20px}
 .section-eyebrow{margin:0 0 10px;color:#72d8ff;font-size:12px;letter-spacing:.2em;text-transform:uppercase}

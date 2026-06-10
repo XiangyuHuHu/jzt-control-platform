@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="business-page">
     <section class="page-header">
       <div>
@@ -150,7 +150,7 @@ const taskRows = [
 </script>
 
 <style scoped>
-.business-page{min-height:100vh;padding:24px 20px 28px;background:#091019;color:#eef6ff}
+.business-page{height:100%;overflow:hidden;padding:0;background:#091019;color:#eef6ff}
 .page-header,.kpi-grid,.content-grid{width:min(100%,1680px);margin:0 auto 16px}
 .page-header{display:flex;justify-content:space-between;gap:24px;padding:28px 30px;border:1px solid rgba(96,183,255,.12);border-radius:20px;background:rgba(8,19,30,.92)}
 .page-tag{margin:0 0 10px;color:#7ecfff;font-size:12px;letter-spacing:.12em}

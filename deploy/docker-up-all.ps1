@@ -28,18 +28,19 @@ try {
         $env:SMART_DENSITY_DB_HOST = "smart-density-mysql"
     }
 
-    docker compose --env-file .env.docker --profile models up -d --build
+    docker compose --env-file .env.docker -p coal-platform-jzt --profile models up -d --build
     if ($LASTEXITCODE -ne 0) {
         throw "docker compose 启动失败"
     }
 
     Write-Host ""
     Write-Host "容器已启动，当前状态：" -ForegroundColor Green
-    docker compose ps
+    docker compose --env-file .env.docker -p coal-platform-jzt ps
     Write-Host ""
-    Write-Host "访问地址：" -ForegroundColor Green
-    Write-Host "  前端: http://localhost" -ForegroundColor Green
-    Write-Host "  后端: http://localhost:8080" -ForegroundColor Green
+    Write-Host "访问地址（金正泰默认 81 端口）：" -ForegroundColor Green
+    Write-Host "  管控平台: http://localhost:81/coal" -ForegroundColor Green
+    Write-Host "  API 代理: http://localhost:81/api" -ForegroundColor Green
+    Write-Host "  后端直连: http://localhost:8081/api" -ForegroundColor Green
     Write-Host ""
     Write-Host "如需查看日志：" -ForegroundColor Green
     Write-Host "  docker compose logs -f server" -ForegroundColor Green

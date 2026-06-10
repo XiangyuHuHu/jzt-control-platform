@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="ops-page">
     <section class="page-hero">
       <div>
@@ -215,7 +215,7 @@ function exportDispatch() {
 </script>
 
 <style scoped>
-.ops-page{min-height:100vh;padding:92px 20px 28px;background:#16202a;color:#eef6ff}
+.ops-page{height:100%;overflow:hidden;padding:0;background:#16202a;color:#eef6ff;display:flex;flex-direction:column;gap:8px}
 .page-hero,.kpi-grid,.content-grid{width:min(100%,1680px);margin:0 auto 16px}
 .page-hero,.panel,.kpi-card{border:1px solid rgba(169,202,232,.18);border-radius:10px;background:#202c38;box-shadow:0 16px 36px rgba(0,0,0,.18)}
 .page-hero{display:flex;justify-content:space-between;gap:24px;padding:26px 30px}.eyebrow{margin:0 0 8px;color:#8bdfff;font-size:12px;letter-spacing:.12em}.page-hero h1{margin:0;font-size:30px}.page-hero p{margin:10px 0 0;color:#c8d6e3}.hero-actions,.filter-tools{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}

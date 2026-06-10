@@ -1,22 +1,45 @@
 ﻿import { createRouter, createWebHistory } from 'vue-router'
 
 const extensionRoutes = [
-  { path: '/coal/process-check', name: 'CoalProcessCheck', moduleKey: 'process-check' },
-  { path: '/coal/material-tracking', name: 'CoalMaterialTracking', moduleKey: 'material-tracking' },
-  { path: '/coal/medium', name: 'CoalMedium', moduleKey: 'medium' },
-  { path: '/coal/reagent', name: 'CoalReagent', moduleKey: 'reagent' },
-  { path: '/coal/water', name: 'CoalWater', moduleKey: 'water' },
-  { path: '/coal/power', name: 'CoalPower', moduleKey: 'power' },
-  { path: '/coal/grease', name: 'CoalGrease', moduleKey: 'grease' },
-  { path: '/coal/air', name: 'CoalAir', moduleKey: 'air' },
+  { path: '/jzt/coal/medium', name: 'CoalMedium', moduleKey: 'medium' },
+  { path: '/jzt/coal/reagent', name: 'CoalReagent', moduleKey: 'reagent' },
+  { path: '/jzt/coal/water', name: 'CoalWater', moduleKey: 'water' },
+  { path: '/jzt/coal/power', name: 'CoalPower', moduleKey: 'power' },
+  { path: '/jzt/coal/grease', name: 'CoalGrease', moduleKey: 'grease' },
+  { path: '/jzt/coal/air', name: 'CoalAir', moduleKey: 'air' },
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      redirect: '/coal',
+      redirect: '/jzt/coal',
+    },
+    {
+      path: '/jzt/coal',
+      name: 'CoalHome',
+      component: () => import('../views/coal/Home.vue'),
+    },
+    {
+      path: '/jzt',
+      redirect: '/jzt/coal',
+    },
+    {
+      path: '/jzt/jzt/:pathMatch(.*)*',
+      redirect: (to) => {
+        const raw = to.params.pathMatch
+        const suffix = Array.isArray(raw) ? raw.join('/') : (raw as string | undefined) || ''
+        return suffix ? `/jzt/${suffix}` : '/jzt/coal'
+      },
+    },
+    {
+      path: '/coal/:pathMatch(.*)*',
+      redirect: (to) => {
+        const raw = to.params.pathMatch
+        const suffix = Array.isArray(raw) ? raw.join('/') : (raw as string | undefined) || ''
+        return suffix ? `/jzt/coal/${suffix}` : '/jzt/coal'
+      },
     },
     {
       path: '/login',
@@ -37,167 +60,172 @@ const router = createRouter({
       ],
     },
     {
-      path: '/coal',
-      name: 'CoalHome',
-      component: () => import('../views/coal/Home.vue'),
-    },
-    {
-      path: '/coal/dashboard',
+      path: '/jzt/coal/dashboard',
       name: 'CoalDashboard',
       component: () => import('../views/coal/Dashboard.vue'),
     },
     {
-      path: '/coal/dashboard-screen',
+      path: '/jzt/coal/dashboard-screen',
       name: 'CoalDashboardScreen',
       component: () => import('../views/coal/DashboardScreen.vue'),
     },
     {
-      path: '/coal/production',
+      path: '/jzt/coal/production',
       name: 'CoalProduction',
       component: () => import('../views/coal/Production.vue'),
     },
     {
-      path: '/coal/production-operation',
+      path: '/jzt/coal/production-operation',
       name: 'CoalProductionOperation',
       component: () => import('../views/coal/ProductionOperation.vue'),
     },
     {
-      path: '/coal/process-flow',
+      path: '/jzt/coal/process-flow',
       name: 'CoalProcessFlow',
       component: () => import('../views/coal/ProcessFlow.vue'),
     },
     {
-      path: '/coal/safety-health',
+      path: '/jzt/coal/safety-health',
       name: 'CoalSafetyHealth',
       component: () => import('../views/coal/SafetyHealth.vue'),
     },
     {
-      path: '/coal/planning',
+      path: '/jzt/coal/planning',
       name: 'CoalPlanning',
       component: () => import('../views/coal/Planning.vue'),
     },
     {
-      path: '/coal/equipment',
+      path: '/jzt/coal/material-tracking',
+      name: 'CoalMaterialTracking',
+      component: () => import('../views/coal/MaterialTracking.vue'),
+    },
+    {
+      path: '/jzt/coal/process-check',
+      name: 'CoalProcessCheck',
+      component: () => import('../views/coal/ProcessCheck.vue'),
+    },
+    {
+      path: '/jzt/coal/equipment',
       name: 'CoalEquipment',
       component: () => import('../views/coal/Equipment.vue'),
     },
     {
-      path: '/coal/equipment-screen',
+      path: '/jzt/coal/equipment-screen',
       name: 'CoalEquipmentScreen',
       component: () => import('../views/coal/EquipmentScreen.vue'),
     },
     {
-      path: '/coal/quality',
+      path: '/jzt/coal/quality',
       name: 'CoalQuality',
       component: () => import('../views/coal/Quality.vue'),
     },
     {
-      path: '/coal/quality-entry',
+      path: '/jzt/coal/quality-entry',
       name: 'CoalQualityEntry',
       component: () => import('../views/coal/QualityEntry.vue'),
     },
     {
-      path: '/coal/storage',
+      path: '/jzt/coal/storage',
       name: 'CoalStorage',
       component: () => import('../views/coal/Storage.vue'),
     },
     {
-      path: '/coal/energy',
+      path: '/jzt/coal/energy',
       name: 'CoalEnergy',
       component: () => import('../views/coal/Energy.vue'),
     },
     {
-      path: '/coal/spare-parts',
+      path: '/jzt/coal/spare-parts',
       name: 'CoalSpareParts',
       component: () => import('../views/coal/SpareParts.vue'),
     },
     {
-      path: '/coal/collaboration',
+      path: '/jzt/coal/collaboration',
       name: 'CoalCollaboration',
       component: () => import('../views/coal/Collaboration.vue'),
     },
     {
-      path: '/coal/energy-screen',
+      path: '/jzt/coal/energy-screen',
       name: 'CoalEnergyScreen',
-      redirect: '/coal/energy',
+      redirect: '/jzt/coal/energy',
     },
     {
-      path: '/coal/report',
+      path: '/jzt/coal/report',
       name: 'CoalReport',
       component: () => import('../views/coal/Report.vue'),
     },
     {
-      path: '/coal/settings',
+      path: '/jzt/coal/settings',
       name: 'CoalSettings',
       component: () => import('../views/coal/Settings.vue'),
     },
     {
-      path: '/coal/dispatch',
+      path: '/jzt/coal/dispatch',
       name: 'CoalDispatch',
       component: () => import('../views/coal/Dispatch.vue'),
     },
     {
-      path: '/coal/dispatch-log',
+      path: '/jzt/coal/dispatch-log',
       name: 'CoalDispatchLog',
       component: () => import('../views/coal/DispatchLog.vue'),
     },
     {
-      path: '/coal/decision',
+      path: '/jzt/coal/decision',
       name: 'CoalDecision',
       component: () => import('../views/coal/Decision.vue'),
     },
     {
-      path: '/coal/model-analysis',
+      path: '/jzt/coal/model-analysis',
       name: 'CoalModelAnalysis',
       component: () => import('../views/coal/ModelAnalysis.vue'),
     },
     {
-      path: '/coal/monitor',
+      path: '/jzt/coal/monitor',
       name: 'CoalMonitor',
       component: () => import('../views/coal/Monitor.vue'),
     },
     {
-      path: '/coal/data-governance',
+      path: '/jzt/coal/data-governance',
       name: 'CoalDataGovernance',
       component: () => import('../views/coal/DataGovernance.vue'),
     },
     {
-      path: '/coal/data-integration',
+      path: '/jzt/coal/data-integration',
       name: 'CoalDataIntegration',
       component: () => import('../views/coal/DataIntegration.vue'),
     },
     {
-      path: '/coal/data-access',
+      path: '/jzt/coal/data-access',
       name: 'CoalDataAccess',
       component: () => import('../views/coal/DataAccess.vue'),
     },
     {
-      path: '/coal/sales',
+      path: '/jzt/coal/sales',
       name: 'CoalSales',
       component: () => import('../views/coal/Sales.vue'),
     },
     {
-      path: '/coal/quality-report',
+      path: '/jzt/coal/quality-report',
       name: 'CoalQualityReport',
       component: () => import('../views/coal/QualityReportCenter.vue'),
     },
     {
-      path: '/coal/mechanical',
+      path: '/jzt/coal/mechanical',
       name: 'CoalMechanical',
       component: () => import('../views/coal/Mechanical.vue'),
     },
     {
-      path: '/coal/smart-density',
+      path: '/jzt/coal/smart-density',
       name: 'CoalSmartDensity',
       component: () => import('../views/coal/SmartDensity.vue'),
     },
     {
-      path: '/coal/smart-reagent',
+      path: '/jzt/coal/smart-reagent',
       name: 'CoalSmartReagent',
       component: () => import('../views/coal/SmartReagent.vue'),
     },
     {
-      path: '/coal/shift-schedule',
+      path: '/jzt/coal/shift-schedule',
       name: 'CoalShiftSchedule',
       component: () => import('../views/coal/ShiftSchedule.vue'),
     },

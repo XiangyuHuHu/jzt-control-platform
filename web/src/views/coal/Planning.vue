@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="planning-page">
     <CoalQuickBar title="生产计划统计" subtitle="对应最新需求中的年度、月度、日计划和班计划管理，支持按计划口径跟踪主要生产指标。" />
 
@@ -160,7 +160,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .planning-page {
-  min-height: 100vh;
+  height:100%;overflow:hidden;
   padding: 0 20px 24px;
   background: #091019;
   color: #eef6ff;

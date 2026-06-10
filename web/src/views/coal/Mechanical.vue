@@ -1,5 +1,5 @@
-<template>
-  <div class="coal-page section-page">
+﻿<template>
+  <div class="coal-page section-page mechanical-page">
     <CoalQuickBar
       title="机电设备台账"
       subtitle="对应最新需求中的设备台账、运行状态、二维码和设备档案，不替换设备总览页，单独形成深页。"
@@ -14,42 +14,37 @@
         </div>
       </section>
 
-      <section class="section-panel filters">
-        <el-select v-model="filterStatus" clearable placeholder="设备状态" style="width:180px">
-          <el-option label="在用" value="在用" />
-          <el-option label="检修" value="检修" />
-          <el-option label="备用" value="备用" />
-        </el-select>
-        <el-button type="primary" @click="loadRows">查询</el-button>
-      </section>
+      <div class="toolbar-row">
+        <section class="stats-grid">
+          <article class="stat-card" v-for="item in stats" :key="item.label">
+            <span>{{ item.label }}</span>
+            <strong>{{ item.value }}</strong>
+            <small>{{ item.note }}</small>
+          </article>
+        </section>
+        <section class="section-panel filters">
+          <el-select v-model="filterStatus" clearable placeholder="设备状态" style="width: 140px" size="small">
+            <el-option label="在用" value="在用" />
+            <el-option label="检修" value="检修" />
+            <el-option label="备用" value="备用" />
+          </el-select>
+          <el-button type="primary" size="small" @click="loadRows">查询</el-button>
+        </section>
+      </div>
 
-      <section class="stats-grid">
-        <article class="stat-card" v-for="item in stats" :key="item.label">
-          <span>{{ item.label }}</span>
-          <strong>{{ item.value }}</strong>
-          <small>{{ item.note }}</small>
-        </article>
-      </section>
-
-      <section class="panel-grid">
-        <section class="section-panel">
+      <div class="mechanical-body">
+        <section class="section-panel chart-panel">
           <div class="panel-head">
-            <div>
-              <h2>设备状态分布</h2>
-              <p>展示当前台账中的在用、检修、备用分布。</p>
-            </div>
+            <h2>设备状态分布</h2>
           </div>
           <div ref="chartEl" class="chart-box"></div>
         </section>
 
         <section class="section-panel detail-panel">
           <div class="panel-head">
-            <div>
-              <h2>设备档案详情</h2>
-              <p>点击左侧表格行后查看基础档案。</p>
-            </div>
+            <h2>设备档案详情</h2>
           </div>
-          <el-descriptions :column="1" border v-if="selectedRow">
+          <el-descriptions v-if="selectedRow" :column="1" border class="detail-desc">
             <el-descriptions-item label="设备名称">{{ selectedRow.name }}</el-descriptions-item>
             <el-descriptions-item label="规格型号">{{ selectedRow.model }}</el-descriptions-item>
             <el-descriptions-item label="设备类型">{{ selectedRow.deviceType }}</el-descriptions-item>
@@ -58,21 +53,18 @@
             <el-descriptions-item label="归属部门">{{ selectedRow.ownerDept }}</el-descriptions-item>
             <el-descriptions-item label="二维码编号">{{ selectedRow.qrCode }}</el-descriptions-item>
           </el-descriptions>
+          <p v-else class="detail-empty">请在下方台账中选择设备</p>
         </section>
-      </section>
 
-      <section class="section-panel">
-        <div class="panel-head">
-          <div>
+        <section class="section-panel table-panel">
+          <div class="panel-head">
             <h2>机电设备台账</h2>
-            <p>保留设备名称、型号、类型、状态、位置、部门和二维码字段。</p>
+            <div class="panel-actions">
+              <el-button size="small" @click="handleExport">导出 CSV</el-button>
+              <el-button type="primary" size="small" @click="handlePrint">打印</el-button>
+            </div>
           </div>
-          <div class="panel-actions">
-            <el-button @click="handleExport">导出 CSV</el-button>
-            <el-button type="primary" @click="handlePrint">打印</el-button>
-          </div>
-        </div>
-        <el-table :data="rows" @row-click="selectedRow = $event">
+          <el-table :data="rows" size="small" highlight-current-row @row-click="selectedRow = $event">
           <el-table-column prop="name" label="设备名称" min-width="180" />
           <el-table-column prop="model" label="规格型号" min-width="120" />
           <el-table-column prop="deviceType" label="设备类型" min-width="120" />
@@ -80,8 +72,9 @@
           <el-table-column prop="location" label="位置" min-width="160" />
           <el-table-column prop="ownerDept" label="归属部门" min-width="120" />
           <el-table-column prop="qrCode" label="二维码编号" min-width="120" />
-        </el-table>
-      </section>
+          </el-table>
+        </section>
+      </div>
     </section>
   </div>
 </template>
@@ -192,26 +185,193 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.section-page{min-height:100vh;padding:0 20px 24px;background:#091019;color:#eef6ff}
-.page-shell{width:min(100%,1680px);margin:0 auto}
-.section-hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:20px}
-.section-eyebrow{margin:0 0 10px;color:#72d8ff;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
-.section-hero h1{margin:0;font-size:38px}
-.section-text{max-width:820px;margin:12px 0 0;color:#96aabc;line-height:1.7}
-.section-panel{padding:22px;border-radius:20px;border:1px solid rgba(122,190,255,.12);background:rgba(12,20,31,.92);box-shadow:0 18px 40px rgba(0,0,0,.16);margin-bottom:20px}
-.filters{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
-.stat-card{padding:18px;border-radius:18px;border:1px solid rgba(122,190,255,.12);background:rgba(12,20,31,.92)}
-.stat-card span{display:block;color:#97aabc}
-.stat-card strong{display:block;margin-top:14px;font-size:30px}
-.stat-card small{display:block;margin-top:10px;color:#6ec8ff}
-.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.detail-panel :deep(.el-descriptions__label){width:120px}
-.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:16px}
-.panel-actions{display:flex;gap:8px;align-items:center}
-.panel-head h2{margin:0;font-size:24px}
-.panel-head p{margin:8px 0 0;color:#8fa8bc}
-.chart-box{height:320px}
-@media (max-width: 1200px){.stats-grid,.panel-grid{grid-template-columns:repeat(2,1fr)}}
-@media (max-width: 768px){.stats-grid,.panel-grid{grid-template-columns:1fr}}
+.section-page {
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+  background: #091019;
+  color: #eef6ff;
+}
+
+.page-shell {
+  width: min(100%, 1680px);
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-hero h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.toolbar-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.stat-card {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(122, 190, 255, 0.12);
+  background: rgba(12, 20, 31, 0.92);
+}
+
+.stat-card span {
+  display: block;
+  color: #97aabc;
+  font-size: 12px;
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 22px;
+}
+
+.stat-card small {
+  display: block;
+  margin-top: 4px;
+  color: #6ec8ff;
+  font-size: 11px;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 12px !important;
+  margin: 0 !important;
+}
+
+.mechanical-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 0.9fr 1fr;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 8px;
+  overflow: hidden;
+}
+
+.section-panel {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(122, 190, 255, 0.12);
+  background: rgba(12, 20, 31, 0.92);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+  margin: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-panel {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.detail-panel {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.table-panel {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex: 0 0 auto;
+}
+
+.panel-head h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.panel-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.chart-box {
+  flex: 1;
+  min-height: 100px;
+}
+
+.table-panel :deep(.el-table) {
+  flex: 1;
+}
+
+.detail-empty {
+  margin: 0;
+  color: #8fa8bc;
+  font-size: 13px;
+}
+
+.detail-panel :deep(.el-descriptions) {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.detail-panel :deep(.el-descriptions__body) {
+  background: transparent !important;
+}
+
+.detail-panel :deep(.el-descriptions__table) {
+  background: transparent !important;
+}
+
+.detail-panel :deep(.el-descriptions__cell) {
+  background: rgba(18, 30, 46, 0.95) !important;
+  border-color: rgba(122, 190, 255, 0.18) !important;
+}
+
+.detail-panel :deep(.el-descriptions__label) {
+  width: 108px;
+  color: #9fb4c9 !important;
+  font-weight: 600;
+  background: rgba(14, 24, 38, 0.98) !important;
+}
+
+.detail-panel :deep(.el-descriptions__content) {
+  color: #eef6ff !important;
+  background: rgba(22, 36, 52, 0.95) !important;
+}
+
+@media (max-width: 1200px) {
+  .toolbar-row {
+    grid-template-columns: 1fr;
+  }
+
+  .mechanical-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
+  }
+
+  .chart-panel,
+  .detail-panel,
+  .table-panel {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
 </style>

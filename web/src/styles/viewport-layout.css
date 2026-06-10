@@ -1,0 +1,567 @@
+/* 单屏视口：禁止整页滚动，内容在导航下方一屏内展示 */
+:root {
+  --coal-nav-height: 80px;
+  --page-pad-x: 14px;
+  --page-pad-y: 10px;
+  --page-gap: 8px;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+  height: 100%;
+  min-height: unset !important;
+}
+
+body.coal-theme {
+  overflow: hidden;
+}
+
+body.coal-theme #app {
+  padding-top: 0 !important;
+}
+
+body.coal-theme .app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.coal-theme .app-main {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+body.coal-theme .app-main > * {
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* 各页面根容器统一为纵向 flex */
+body.coal-theme :is(
+  .section-page,
+  .ops-page,
+  .equipment-page,
+  .energy-page,
+  .decision-page,
+  .report-page,
+  .shift-page,
+  .coal-home,
+  .business-page,
+  .coal-page-v2,
+  .command-page,
+  .dashboard-screen,
+  .equipment-screen,
+  .dispatch-page,
+  .planning-page,
+  .sales-page
+) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  min-height: unset !important;
+  overflow: hidden;
+  padding: var(--page-pad-y) var(--page-pad-x) !important;
+}
+
+body.coal-theme .coal-page:not(.section-page) {
+  height: 100%;
+  max-height: 100%;
+  min-height: unset !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: var(--page-pad-y) var(--page-pad-x) !important;
+}
+
+body.coal-theme .section-page .page-shell,
+body.coal-theme .coal-page-v2 .page-layout,
+body.coal-theme .business-page > :not(.page-header),
+body.coal-theme .content-shell {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+body.coal-theme .section-page .page-shell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  width: min(100%, 1680px);
+  margin: 0 auto;
+}
+
+body.coal-theme .section-hero {
+  flex: 0 0 auto;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+}
+
+body.coal-theme .section-hero h1 {
+  margin: 0 !important;
+  font-size: 20px !important;
+  line-height: 1.25;
+}
+
+body.coal-theme .section-text {
+  display: none;
+}
+
+body.coal-theme .section-panel {
+  margin-bottom: 0 !important;
+  min-height: 0;
+  overflow: hidden;
+}
+
+body.coal-theme .filters {
+  flex: 0 0 auto;
+  padding: 10px 14px !important;
+  margin-bottom: 0 !important;
+}
+
+body.coal-theme .stats-grid {
+  flex: 0 0 auto;
+  margin-bottom: 0 !important;
+  gap: 8px !important;
+}
+
+body.coal-theme .stat-card {
+  padding: 10px 12px !important;
+}
+
+body.coal-theme .stat-card strong {
+  margin-top: 6px !important;
+  font-size: 22px !important;
+}
+
+body.coal-theme .panel-head h2 {
+  font-size: 15px !important;
+}
+
+body.coal-theme .panel-head p {
+  display: none;
+}
+
+body.coal-theme .section-panel {
+  padding: 12px 14px !important;
+  border-radius: 14px !important;
+}
+
+/* 三栏主内容区（工艺流程等页在模板里包一层 viewport-main-grid） */
+.viewport-main-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr 1.2fr;
+  grid-template-rows: minmax(0, 1fr);
+  gap: var(--page-gap);
+  overflow: hidden;
+}
+
+.viewport-main-grid--2col {
+  grid-template-columns: 1fr 1fr;
+}
+
+.viewport-main-grid > .section-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.viewport-main-grid .chart-box {
+  flex: 1;
+  min-height: 0;
+  height: auto !important;
+}
+
+.viewport-main-grid .flow-map-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.viewport-main-grid .flow-map {
+  flex: 1;
+  min-height: 0;
+  height: auto !important;
+}
+
+.viewport-main-grid .el-table {
+  flex: 1;
+  min-height: 0;
+}
+
+.viewport-main-grid .pager-wrap {
+  flex: 0 0 auto;
+  margin-top: 6px !important;
+}
+
+/* page-hero 族：头部 + KPI + 内容网格一屏 */
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page) {
+  gap: var(--page-gap);
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page)
+  > :is(.page-hero, .kpi-grid) {
+  flex: 0 0 auto;
+  margin: 0 auto !important;
+  width: min(100%, 1680px);
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page)
+  .page-hero {
+  padding: 14px 18px !important;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page)
+  .page-hero h1 {
+  font-size: 20px !important;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page)
+  .page-hero p {
+  display: none;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page)
+  .kpi-grid {
+  margin-bottom: 0 !important;
+  gap: 8px !important;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page)
+  .content-grid {
+  flex: 1;
+  min-height: 0;
+  margin: 0 auto !important;
+  width: min(100%, 1680px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--page-gap) !important;
+  overflow: hidden;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page)
+  .panel {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px !important;
+  margin: 0 !important;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page)
+  .panel--wide {
+  grid-column: span 2;
+}
+
+body.coal-theme :is(.ops-page, .equipment-page, .energy-page, .decision-page, .report-page, .shift-page)
+  .flow-map {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* business-page / coal-home */
+body.coal-theme .business-page {
+  gap: var(--page-gap);
+}
+
+body.coal-theme .business-page .page-header {
+  flex: 0 0 auto;
+  margin: 0 auto !important;
+  width: min(100%, 1680px);
+  padding: 12px 16px !important;
+}
+
+body.coal-theme .business-page .page-desc {
+  display: none;
+}
+
+body.coal-theme .business-page .kpi-grid,
+body.coal-theme .business-page .content-grid {
+  flex: 1;
+  min-height: 0;
+  margin: 0 auto !important;
+  width: min(100%, 1680px);
+  overflow: hidden;
+}
+
+body.coal-theme .business-page .content-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--page-gap) !important;
+}
+
+body.coal-theme .business-page .panel {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+body.coal-theme .business-page .chart-box {
+  flex: 1;
+  min-height: 0;
+  height: auto !important;
+}
+
+body.coal-theme .coal-home {
+  gap: var(--page-gap);
+  overflow: hidden !important;
+}
+
+body.coal-theme .coal-home .hero-shell {
+  flex: 0 0 auto;
+  margin-bottom: 0 !important;
+  padding: 16px 18px !important;
+}
+
+body.coal-theme .coal-home .hero-copy h1 {
+  font-size: 24px !important;
+}
+
+body.coal-theme .coal-home .content-shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(0, 1.04fr) minmax(0, 0.9fr) minmax(0, 0.78fr);
+  gap: 10px;
+  width: min(100%, 1800px);
+  margin: 0 auto;
+  overflow: hidden !important;
+}
+
+body.coal-theme .coal-home .section-card {
+  margin-bottom: 0 !important;
+  min-height: 0;
+  overflow: hidden;
+  padding: 12px 14px !important;
+}
+
+body.coal-theme .coal-home .section-head p {
+  display: none;
+}
+
+body.coal-theme .coal-home .entry-grid,
+body.coal-theme .coal-home .data-grid,
+body.coal-theme .coal-home .topic-grid {
+  min-height: 0;
+  overflow: hidden;
+  align-content: start;
+  gap: 8px !important;
+}
+
+/* coal-page-v2 */
+body.coal-theme .coal-page-v2 {
+  gap: var(--page-gap);
+}
+
+/* coal-page-v2 详细规则见 coal-page-fixes.css */
+
+/* command-page 扩展模块 */
+body.coal-theme .command-page {
+  gap: var(--page-gap);
+  padding: var(--page-pad-y) 16px !important;
+}
+
+body.coal-theme .command-page .hero-shell {
+  flex: 0 0 auto;
+  padding: 12px 16px !important;
+}
+
+body.coal-theme .command-page .hero-shell h1 {
+  font-size: 20px !important;
+}
+
+body.coal-theme .command-page .subtitle {
+  display: none;
+}
+
+body.coal-theme .command-page .metric-grid {
+  flex: 0 0 auto;
+  margin-top: 0 !important;
+  gap: 8px !important;
+}
+
+body.coal-theme .command-page .metric-card strong {
+  font-size: 26px !important;
+}
+
+body.coal-theme .command-page .command-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--page-gap);
+  overflow: hidden;
+}
+
+body.coal-theme .command-page .table-panel {
+  margin-top: 0 !important;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+body.coal-theme .command-page .data-table {
+  font-size: 12px;
+}
+
+body.coal-theme .command-page .data-table th,
+body.coal-theme .command-page .data-table td {
+  padding: 8px 10px;
+}
+
+/* 大屏 */
+body.coal-theme .dashboard-screen,
+body.coal-theme .equipment-screen {
+  height: 100% !important;
+  padding: 6px !important;
+}
+
+/* Element Plus 表格紧凑化 */
+body.coal-theme .el-table {
+  --el-table-row-height: 36px;
+  font-size: 12px;
+}
+
+body.coal-theme .el-table .el-table__cell {
+  padding: 6px 0;
+}
+
+body.coal-theme .el-table__body-wrapper {
+  overflow: hidden !important;
+}
+
+body.coal-theme .el-pagination {
+  --el-pagination-button-height: 26px;
+}
+
+@media (max-width: 1400px) {
+  .viewport-main-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .viewport-main-grid > .section-panel:last-child {
+    grid-column: 1 / -1;
+  }
+
+  body.coal-theme .coal-home .content-shell {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  body.coal-theme .coal-home .content-shell .section-card:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* section-page 详细规则见 coal-page-fixes.css */
+
+/* planning / data / sales 等自定义根类 */
+body.coal-theme :is(.planning-page, .data-page, .sales-page, .settings-page) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  min-height: unset !important;
+  overflow: hidden;
+  padding: var(--page-pad-y) var(--page-pad-x) !important;
+  gap: var(--page-gap);
+}
+
+body.coal-theme .planning-page .page-shell,
+body.coal-theme .sales-page .page-shell {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: var(--page-gap);
+  overflow: hidden;
+  width: min(100%, 1680px);
+  margin: 0 auto;
+}
+
+body.coal-theme .planning-page .page-head,
+body.coal-theme .sales-page .page-head {
+  grid-column: 1 / -1;
+}
+
+body.coal-theme .data-page {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--page-gap);
+  width: min(100%, 1680px);
+  margin: 0 auto;
+}
+
+body.coal-theme .data-page > .stat-row {
+  grid-column: 1 / -1;
+}
+
+body.coal-theme .data-page > .grid-two {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+body.coal-theme .settings-page .settings-header {
+  flex: 0 0 auto;
+}
+
+body.coal-theme .settings-page .settings-header .header-text {
+  display: none;
+}
+
+body.coal-theme .settings-page .settings-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+}
+
+body.coal-theme .settings-page .card {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+body.coal-theme .settings-page .table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 960px) {
+  .viewport-main-grid,
+  body.coal-theme .business-page .content-grid,
+  body.coal-theme .coal-page-v2 .page-layout,
+  body.coal-theme .section-page .page-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+  }
+}

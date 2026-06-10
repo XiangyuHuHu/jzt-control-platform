@@ -1,3 +1,5 @@
+import { withApiBase } from './apiBase'
+
 export interface ApiResponse<T> {
   code: number
   message: string
@@ -104,7 +106,7 @@ const buildQuery = (params: Record<string, string | number | boolean | undefined
 }
 
 const request = async <T>(path: string, init?: RequestInit): Promise<ApiResponse<T>> => {
-  const response = await fetch(`/api/iot${path}`, {
+  const response = await fetch(withApiBase(`/api/iot${path}`), {
     headers: {
       'Content-Type': 'application/json',
       ...(init?.headers || {}),

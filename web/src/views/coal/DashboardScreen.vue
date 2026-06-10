@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div ref="screenShellRef" class="dashboard-screen">
     <div class="screen-canvas" :style="{ transform: `scale(${screenScale})` }">
     <section class="screen-header">
@@ -208,7 +208,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { INDUSTRIAL_CHART_COLORS, buildIndustrialLineStyle, echarts } from '../../utils/echarts'
+import { INDUSTRIAL_CHART_COLORS, echarts } from '../../utils/echarts'
 
 type LedgerNode = {
   id: string
@@ -387,7 +387,7 @@ const notify = (message: string) => {
 
 const openConsumeModal = (type: string) => {
   if (type === 'all') {
-    window.location.href = '/coal/energy'
+    window.location.href = '/jzt/coal/energy'
   }
 }
 
@@ -415,7 +415,12 @@ const renderCharts = () => {
   if (trendChartRef.value) {
     trendChart ??= echarts.init(trendChartRef.value)
     trendChart.setOption({
-      tooltip: { trigger: 'axis' },
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: 'rgba(12, 28, 44, 0.78)',
+        borderColor: 'rgba(96, 231, 255, 0.45)',
+        borderWidth: 1,
+      },
       grid: { top: 26, left: 56, right: 20, bottom: 36 },
       xAxis: {
         type: 'category',
@@ -432,8 +437,16 @@ const renderCharts = () => {
         {
           name: '生产',
           type: 'line',
+          smooth: true,
+          symbolSize: 7,
           data: [29907, 30361, 29061, 21478, 26422, 27764, 23174],
-          ...buildIndustrialLineStyle(INDUSTRIAL_CHART_COLORS.primary),
+          lineStyle: { width: 4, color: INDUSTRIAL_CHART_COLORS.primary, shadowBlur: 14, shadowColor: INDUSTRIAL_CHART_COLORS.primary },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: 'rgba(69, 203, 255, 0.34)' },
+              { offset: 1, color: 'rgba(69, 203, 255, 0.02)' },
+            ]),
+          },
         },
       ],
     })
@@ -469,7 +482,12 @@ const renderCharts = () => {
   if (qualityChartRef.value) {
     qualityChart ??= echarts.init(qualityChartRef.value)
     qualityChart.setOption({
-      tooltip: { trigger: 'axis' },
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: 'rgba(12, 28, 44, 0.78)',
+        borderColor: 'rgba(96, 231, 255, 0.45)',
+        borderWidth: 1,
+      },
       legend: { top: 0, textStyle: { color: INDUSTRIAL_CHART_COLORS.axis } },
       grid: { top: 30, left: 50, right: 20, bottom: 40 },
       xAxis: {
@@ -487,14 +505,17 @@ const renderCharts = () => {
         {
           name: '灰分',
           type: 'line',
+          smooth: true,
           data: [17.5, 17.2, 17.4, 17.8, 17.6, 17.3, 17.1],
-          ...buildIndustrialLineStyle(INDUSTRIAL_CHART_COLORS.primary),
+          lineStyle: { width: 4, color: INDUSTRIAL_CHART_COLORS.primary, shadowBlur: 12, shadowColor: INDUSTRIAL_CHART_COLORS.primary },
+          areaStyle: { color: 'rgba(69, 203, 255, 0.12)' },
         },
         {
           name: '硫分',
           type: 'line',
+          smooth: true,
           data: [1.1, 1.05, 1.13, 1.09, 1.14, 1.12, 1.1],
-          ...buildIndustrialLineStyle(INDUSTRIAL_CHART_COLORS.secondary),
+          lineStyle: { width: 4, color: INDUSTRIAL_CHART_COLORS.secondary, shadowBlur: 12, shadowColor: INDUSTRIAL_CHART_COLORS.secondary },
         },
       ],
     })
@@ -503,12 +524,22 @@ const renderCharts = () => {
   if (deviceInfoPieRef.value) {
     deviceInfoPie ??= echarts.init(deviceInfoPieRef.value)
     deviceInfoPie.setOption({
+      title: {
+        text: '209',
+        subtext: '运行中',
+        left: '35%',
+        top: '38%',
+        textAlign: 'center',
+        textStyle: { color: '#eaffff', fontSize: 30, fontWeight: 900 },
+        subtextStyle: { color: '#8feeff', fontSize: 13 },
+      },
       legend: { right: 0, top: 'middle', orient: 'vertical', textStyle: { color: INDUSTRIAL_CHART_COLORS.axis } },
       series: [
         {
           type: 'pie',
-          radius: ['52%', '74%'],
+          radius: ['46%', '78%'],
           center: ['35%', '52%'],
+          roseType: 'radius',
           data: [
             { value: 209, name: '在用', itemStyle: { color: INDUSTRIAL_CHART_COLORS.primary } },
             { value: 0, name: '备用', itemStyle: { color: INDUSTRIAL_CHART_COLORS.secondary } },
@@ -542,9 +573,9 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .dashboard-screen {
-  height: calc(100vh - 80px);
+  height: 100%;
   overflow: hidden;
-  padding: 8px;
+  padding: 14px;
   background:
     radial-gradient(circle at center, rgba(38, 166, 255, 0.14), transparent 28%),
     #040914;
@@ -552,10 +583,51 @@ onBeforeUnmount(() => {
 }
 
 .screen-canvas {
+  position: relative;
   width: 1920px;
   height: 1080px;
   margin: 0 auto;
   transform-origin: top center;
+  padding: 16px;
+  border: 2px solid rgba(102, 220, 255, 0.52);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(12, 24, 48, 0.42), rgba(4, 10, 26, 0.24)),
+    rgba(3, 9, 22, 0.74);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 34px rgba(38, 195, 255, 0.18),
+    inset 0 0 46px rgba(48, 180, 255, 0.14);
+  box-sizing: border-box;
+}
+
+.screen-canvas::before,
+.screen-canvas::after {
+  position: absolute;
+  z-index: 2;
+  width: 92px;
+  height: 92px;
+  border-color: rgba(125, 231, 255, 0.86);
+  pointer-events: none;
+  content: '';
+}
+
+.screen-canvas::before {
+  top: 8px;
+  left: 8px;
+  border-top: 3px solid;
+  border-left: 3px solid;
+  border-radius: 14px 0 0;
+  box-shadow: -6px -6px 18px rgba(84, 212, 255, 0.18);
+}
+
+.screen-canvas::after {
+  right: 8px;
+  bottom: 8px;
+  border-right: 3px solid;
+  border-bottom: 3px solid;
+  border-radius: 0 0 14px;
+  box-shadow: 6px 6px 18px rgba(84, 212, 255, 0.18);
 }
 
 .screen-header,
@@ -584,18 +656,54 @@ onBeforeUnmount(() => {
 }
 
 .header-actions button {
+  position: relative;
   height: 52px;
   padding: 0 24px;
-  border: 0;
-  background: rgba(18, 228, 255, 0.14);
-  color: #17e3ff;
+  border: 1px solid rgba(84, 211, 255, 0.44);
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 34%),
+    linear-gradient(180deg, rgba(25, 78, 124, 0.92), rgba(8, 26, 58, 0.96));
+  color: #bff4ff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    inset 0 -4px 0 rgba(0, 0, 0, 0.24),
+    0 8px 18px rgba(0, 0, 0, 0.36),
+    0 0 16px rgba(34, 197, 255, 0.12);
   cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.header-actions button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(129, 232, 255, 0.8);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -4px 0 rgba(0, 0, 0, 0.2),
+    0 12px 22px rgba(0, 0, 0, 0.42),
+    0 0 22px rgba(55, 215, 255, 0.22);
+}
+
+.header-actions button:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.34),
+    0 4px 10px rgba(0, 0, 0, 0.28);
 }
 
 .header-actions button.active {
-  background: #12dcff;
-  color: #031423;
+  border-color: rgba(255, 213, 112, 0.94);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), transparent 34%),
+    linear-gradient(180deg, #ffd974 0%, #d99a27 52%, #8a5613 100%);
+  color: #231300;
   font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255, 238, 184, 0.62);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -4px 0 rgba(85, 44, 0, 0.38),
+    0 10px 22px rgba(0, 0, 0, 0.44),
+    0 0 24px rgba(255, 185, 54, 0.36);
 }
 
 .header-title {
@@ -612,9 +720,16 @@ onBeforeUnmount(() => {
 
 .panel {
   position: relative;
-  border: 1px solid rgba(40, 184, 255, 0.58);
-  background: linear-gradient(180deg, rgba(8, 18, 41, 0.94), rgba(3, 8, 20, 0.92));
-  box-shadow: inset 0 0 28px rgba(0, 180, 255, 0.08);
+  border: 1px solid rgba(74, 197, 255, 0.68);
+  border-radius: 10px;
+  background:
+    linear-gradient(135deg, rgba(117, 227, 255, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(8, 18, 41, 0.96), rgba(3, 8, 20, 0.94));
+  box-shadow:
+    inset 0 0 28px rgba(0, 180, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(5, 40, 82, 0.9),
+    0 14px 30px rgba(0, 0, 0, 0.24);
   overflow: hidden;
 }
 
@@ -626,6 +741,11 @@ onBeforeUnmount(() => {
   height: 2px;
   background: linear-gradient(90deg, transparent, #31e7ff);
   top: 10px;
+}
+
+.panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 .panel::before {
@@ -677,18 +797,27 @@ onBeforeUnmount(() => {
 .silo-label {
   position: absolute;
   display: grid;
-  gap: 8px;
-  color: #1fe4ff;
+  gap: 6px;
+  color: #aef6ff;
   text-align: center;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(5, 20, 46, 0.62);
+  border: 1px solid rgba(92, 215, 255, 0.22);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
 }
 
 .silo-label strong {
-  font-size: 20px;
+  font-size: 24px;
+  line-height: 1.05;
+  text-shadow: 0 0 10px rgba(91, 223, 255, 0.45);
 }
 
 .silo-label span {
-  font-size: 18px;
-  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(20, 61, 113, 0.5);
 }
 
 .globe-shell {
@@ -789,13 +918,36 @@ onBeforeUnmount(() => {
 }
 
 .center-actions button {
+  position: relative;
   height: 72px;
-  border: 2px solid rgba(22, 229, 255, 0.75);
-  background: linear-gradient(180deg, rgba(12, 226, 255, 0.95), rgba(10, 169, 209, 0.9));
-  color: #042136;
+  border: 1px solid rgba(116, 223, 255, 0.72);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24), transparent 35%),
+    linear-gradient(180deg, rgba(38, 182, 224, 0.96), rgba(12, 97, 151, 0.96));
+  color: #041b2e;
   font-size: 18px;
   font-weight: 700;
+  text-shadow: 0 1px 0 rgba(201, 247, 255, 0.64);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -5px 0 rgba(0, 35, 68, 0.34),
+    0 12px 22px rgba(0, 0, 0, 0.32),
+    0 0 20px rgba(38, 202, 255, 0.18);
   cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+.center-actions button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.center-actions button:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 4px 10px rgba(0, 0, 0, 0.32),
+    0 5px 12px rgba(0, 0, 0, 0.28);
 }
 
 .mini-table {
@@ -887,14 +1039,23 @@ onBeforeUnmount(() => {
   padding: 0 16px;
   border: 0;
   border-right: 1px solid rgba(93, 177, 255, 0.18);
-  background: transparent;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 36%),
+    rgba(7, 22, 50, 0.36);
   color: rgba(217, 239, 255, 0.72);
   cursor: pointer;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.18);
 }
 
 .ledger-tab.active {
-  color: #51d9ff;
-  background: rgba(38, 79, 154, 0.28);
+  color: #251500;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), transparent 34%),
+    linear-gradient(180deg, #ffdc7a, #d99a27);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.48),
+    inset 0 -3px 0 rgba(96, 54, 4, 0.32),
+    0 0 18px rgba(255, 190, 52, 0.26);
 }
 
 .ledger-card {

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="coal-page-v2 settings-page">
     <div class="settings-header">
       <p class="eyebrow">system settings</p>
@@ -511,7 +511,7 @@ const saveParams = () => { addAuditLog('系统参数', '修改', `日产量=${sy
 </script>
 
 <style scoped>
-.coal-page-v2{min-height:100vh;background:#091019;color:#eef6ff}
+.coal-page-v2{height:100%;overflow:hidden;background:#091019;color:#eef6ff}
 .settings-header{width:min(100%,1800px);margin:0 auto;padding:20px 20px 0}
 .eyebrow{margin:0 0 10px;color:#78cfff;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
 .settings-header h1{margin:0;font-size:36px}

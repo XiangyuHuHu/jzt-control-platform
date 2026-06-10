@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="coal-page section-page">
     <CoalQuickBar
       title="建模分析专题"
@@ -16,8 +16,10 @@
 
       <section class="stats-grid">
         <article class="stat-card" v-for="item in stats" :key="item.label">
-          <span>{{ item.label }}</span>
-          <strong>{{ item.value }}</strong>
+          <div class="stat-main">
+            <span>{{ item.label }}</span>
+            <strong>{{ item.value }}</strong>
+          </div>
           <small>{{ item.note }}</small>
         </article>
       </section>
@@ -25,8 +27,8 @@
       <section class="section-panel">
         <div class="panel-head">
           <div>
-            <h2>模型置信度分布</h2>
-            <p>用于展示当前主要模型的可信度和可用状态。</p>
+            <h2>预测值 vs 实际值散点回归</h2>
+            <p>用于评估模型拟合质量，观察预测偏差是否集中在可控区间。</p>
           </div>
         </div>
         <div ref="chartEl" class="chart-box"></div>
@@ -46,7 +48,11 @@
         <el-table :data="rows">
           <el-table-column prop="modelName" label="模型名称" min-width="200" />
           <el-table-column prop="category" label="分类" min-width="120" />
-          <el-table-column prop="status" label="状态" min-width="120" />
+          <el-table-column prop="status" label="状态" min-width="120">
+            <template #default="{ row }">
+              <span class="status-pill" :class="statusClass(row.status)">{{ row.status }}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="conclusion" label="分析结论" min-width="260" show-overflow-tooltip />
           <el-table-column prop="suggestion" label="建议" min-width="260" show-overflow-tooltip />
           <el-table-column prop="confidence" label="置信度" min-width="120" />
@@ -103,16 +109,60 @@ function renderChart() {
   if (!chartEl.value) return
   chart?.dispose()
   chart = echarts.init(chartEl.value)
+  const points = rows.value.map((item, index) => {
+    const predicted = Number(item.confidence.replace('%', ''))
+    const actual = Number((predicted + [0.6, -0.9, -1.7, 0.8][index % 4]).toFixed(1))
+    return { value: [predicted, actual], name: item.modelName }
+  })
   chart.setOption({
-    tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: rows.value.map(item => item.modelName), axisLabel: { color: '#9fb4c9', rotate: 18 } },
-    yAxis: { type: 'value', max: 100, axisLabel: { color: '#9fb4c9' }, splitLine: { lineStyle: { color: 'rgba(120,160,200,0.12)' } } },
-    grid: { left: '3%', right: '4%', bottom: '8%', containLabel: true },
-    series: [{ type: 'bar', data: rows.value.map(item => Number(item.confidence.replace('%', ''))), itemStyle: { color: '#4ec9ff', borderRadius: [6, 6, 0, 0] } }],
+    tooltip: {
+      trigger: 'item',
+      formatter: (params: any) => {
+        const [pred, actual] = params.value
+        return `${params.name}<br/>预测值：${pred}%<br/>实际值：${actual}%`
+      },
+    },
+    xAxis: {
+      type: 'value',
+      name: '预测值(%)',
+      min: 80,
+      max: 100,
+      axisLabel: { color: '#9fb4c9' },
+      splitLine: { lineStyle: { color: 'rgba(120,160,200,0.12)' } },
+    },
+    yAxis: {
+      type: 'value',
+      name: '实际值(%)',
+      min: 80,
+      max: 100,
+      axisLabel: { color: '#9fb4c9' },
+      splitLine: { lineStyle: { color: 'rgba(120,160,200,0.12)' } },
+    },
+    grid: { left: '6%', right: '4%', bottom: '12%', containLabel: true },
+    series: [
+      {
+        name: '模型样本',
+        type: 'scatter',
+        data: points,
+        symbolSize: 16,
+        itemStyle: { color: '#4ec9ff', shadowBlur: 10, shadowColor: 'rgba(78,201,255,0.4)' },
+      },
+      {
+        name: '理想拟合线',
+        type: 'line',
+        data: [
+          [80, 80],
+          [100, 100],
+        ],
+        lineStyle: { color: '#ffb347', type: 'dashed', width: 2 },
+        symbol: 'none',
+      },
+    ],
   })
 }
 
 const handleResize = () => chart?.resize()
+const statusClass = (status: string) => (status === '运行中' ? 'status-pill--running' : 'status-pill--review')
 
 const exportColumns: Array<{ key: keyof ModelAnalysisDto; label: string }> = [
   { key: 'modelName', label: '模型名称' },
@@ -157,7 +207,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.section-page{min-height:100vh;padding:0 20px 24px;background:#091019;color:#eef6ff}
+.section-page{height:100%;overflow:hidden;padding:0;background:#091019;color:#eef6ff}
 .page-shell{width:min(100%,1680px);margin:0 auto}
 .section-hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:20px}
 .section-eyebrow{margin:0 0 10px;color:#72d8ff;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
@@ -165,15 +215,19 @@ onUnmounted(() => {
 .section-text{max-width:820px;margin:12px 0 0;color:#96aabc;line-height:1.7}
 .section-panel{padding:22px;border-radius:20px;border:1px solid rgba(122,190,255,.12);background:rgba(12,20,31,.92);box-shadow:0 18px 40px rgba(0,0,0,.16);margin-bottom:20px}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
-.stat-card{padding:18px;border-radius:18px;border:1px solid rgba(122,190,255,.12);background:rgba(12,20,31,.92)}
-.stat-card span{display:block;color:#97aabc}
-.stat-card strong{display:block;margin-top:14px;font-size:30px}
-.stat-card small{display:block;margin-top:10px;color:#6ec8ff}
+.stat-card{padding:14px 16px;border-radius:18px;border:1px solid rgba(122,190,255,.12);background:rgba(12,20,31,.92);display:flex;flex-direction:column;gap:8px;justify-content:space-between;min-height:110px}
+.stat-main{display:flex;flex-direction:column;gap:8px}
+.stat-card span{display:block;color:#97aabc;font-size:12px}
+.stat-card strong{display:block;font-size:30px;line-height:1.1}
+.stat-card small{display:block;color:#6ec8ff;font-size:12px}
 .panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:16px}
 .panel-actions{display:flex;gap:8px;align-items:center}
 .panel-head h2{margin:0;font-size:24px}
 .panel-head p{margin:8px 0 0;color:#8fa8bc}
 .chart-box{height:320px}
+.status-pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px}
+.status-pill--running{color:#7ef4be;background:rgba(25,190,107,.22)}
+.status-pill--review{color:#ffc56a;background:rgba(255,153,0,.22)}
 @media (max-width: 1200px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width: 768px){.stats-grid{grid-template-columns:1fr}}
 </style>

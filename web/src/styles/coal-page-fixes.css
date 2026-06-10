@@ -1,0 +1,458 @@
+/* 修复单屏布局下各业务页不协调：覆盖 viewport-layout 中的冲突规则 */
+
+/* coal-page-v2：page-layout 仅作容器，不用 2×2 硬切 */
+body.coal-theme .coal-page-v2 .page-layout {
+  display: flex !important;
+  flex-direction: column !important;
+  grid-template-columns: unset !important;
+  grid-template-rows: unset !important;
+  width: min(100%, 1800px) !important;
+  height: 100% !important;
+  margin: 0 auto !important;
+  padding: 10px 14px !important;
+  box-sizing: border-box;
+  gap: var(--page-gap);
+  min-height: 0;
+  overflow: hidden;
+}
+
+body.coal-theme .coal-page-v2 .page-main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-gap);
+  overflow: hidden;
+}
+
+/* section-page：顶栏 + 指标 + 筛选 在上，下方两栏内容 */
+body.coal-theme .section-page .page-shell {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-rows: auto auto auto minmax(0, 1fr) !important;
+  gap: var(--page-gap) !important;
+  align-content: stretch;
+}
+
+body.coal-theme .section-page .page-shell > :is(
+  .section-hero,
+  .stats-grid,
+  .filters,
+  .viewport-main-grid,
+  .panel-grid,
+  .page-topbar
+) {
+  grid-column: 1 / -1 !important;
+}
+
+body.coal-theme .section-page .page-shell > .stats-grid {
+  max-height: 72px;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+body.coal-theme .section-page .page-shell > .filters {
+  max-height: 52px;
+  padding: 8px 12px !important;
+  display: flex !important;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+body.coal-theme .section-page .page-shell > .section-panel:not(.filters) {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0 !important;
+}
+
+body.coal-theme .section-page .page-shell > .section-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+body.coal-theme .section-page .hero-actions {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* 质量控制中心：布局由 Quality.vue scoped 样式负责 */
+body.coal-theme .quality-page .page-layout {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 10px 14px !important;
+}
+
+/* 智能巡检 */
+body.coal-theme .monitor-page .hero {
+  flex: 0 0 auto;
+  align-items: center !important;
+  margin-bottom: 0 !important;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(122, 190, 255, 0.12);
+  background: rgba(12, 20, 31, 0.92);
+}
+
+body.coal-theme .monitor-page .hero-text,
+body.coal-theme .monitor-page .eyebrow {
+  display: none !important;
+}
+
+body.coal-theme .monitor-page .hero h1 {
+  font-size: 20px !important;
+}
+
+body.coal-theme .monitor-page .stats-grid {
+  flex: 0 0 auto;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  margin: 0 !important;
+  gap: 8px !important;
+}
+
+body.coal-theme .monitor-page .stat-card {
+  padding: 10px 12px !important;
+  border-radius: 12px !important;
+}
+
+body.coal-theme .monitor-page .stat-card strong {
+  margin: 6px 0 4px !important;
+  font-size: 24px !important;
+}
+
+/* monitor 四宫格：左上图 / 左下报警 / 右上AI / 右下任务 */
+body.coal-theme .monitor-page .monitor-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--page-gap);
+  overflow: hidden;
+}
+
+body.coal-theme .monitor-page .map-panel {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+body.coal-theme .monitor-page .alert-panel {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+body.coal-theme .monitor-page .ai-panel {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+body.coal-theme .monitor-page .task-panel {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* 机电台账 */
+body.coal-theme .mechanical-page .page-shell {
+  display: flex !important;
+  flex-direction: column !important;
+  grid-template-columns: unset !important;
+  grid-template-rows: unset !important;
+}
+
+body.coal-theme .mechanical-page .toolbar-row {
+  grid-column: unset !important;
+}
+
+body.coal-theme .mechanical-page .mechanical-body {
+  flex: 1;
+  min-height: 0;
+}
+
+/* 综合看板（/coal/dashboard）使用专属两列布局，避免被 business-page 通用三列规则挤压 */
+body.coal-theme .dashboard-page .content-grid {
+  grid-template-columns: 1.2fr 0.8fr !important;
+  grid-template-rows: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr) !important;
+}
+
+body.coal-theme .dashboard-page .page-actions .el-button {
+  min-width: 104px;
+  height: 34px;
+}
+
+body.coal-theme .monitor-page .panel {
+  padding: 12px 14px !important;
+  border-radius: 14px !important;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+body.coal-theme .monitor-page .map-stage {
+  flex: 1;
+  min-height: 0;
+  height: auto !important;
+}
+
+body.coal-theme .monitor-page .ai-cards {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  gap: 8px !important;
+}
+
+body.coal-theme .monitor-page .ai-image {
+  height: 56px !important;
+  min-height: 56px !important;
+}
+
+/* 深色主题下的 descriptions 统一可读 */
+body.coal-theme .detail-panel :deep(.el-descriptions__label),
+body.coal-theme .detail-desc :deep(.el-descriptions__label) {
+  color: #9fb4c9 !important;
+  background: rgba(14, 24, 38, 0.98) !important;
+}
+
+body.coal-theme .detail-panel :deep(.el-descriptions__content),
+body.coal-theme .detail-desc :deep(.el-descriptions__content) {
+  color: #eef6ff !important;
+  background: rgba(22, 36, 52, 0.95) !important;
+}
+
+body.coal-theme .detail-panel :deep(.el-descriptions__cell),
+body.coal-theme .detail-desc :deep(.el-descriptions__cell) {
+  border-color: rgba(122, 190, 255, 0.18) !important;
+}
+
+body.coal-theme .detail-panel :deep(.el-descriptions__body),
+body.coal-theme .detail-desc :deep(.el-descriptions__body) {
+  background: transparent !important;
+}
+
+/* 生产运行 6 页：解除单屏硬裁切，统一为自然滚动布局 */
+body.coal-theme :is(
+  .ops-page,
+  .planning-page,
+  .shift-page,
+  .production-operation-page,
+  .process-flow-page,
+  .dispatch-log-page
+) {
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 0 !important;
+  overflow: auto !important;
+  padding: 12px 14px 18px !important;
+}
+
+body.coal-theme :is(
+  .ops-page,
+  .planning-page,
+  .shift-page,
+  .production-operation-page,
+  .process-flow-page,
+  .dispatch-log-page
+) :is(.page-shell, .content-grid) {
+  width: min(100%, 1680px);
+  margin: 0 auto;
+}
+
+body.coal-theme :is(
+  .production-operation-page,
+  .process-flow-page,
+  .dispatch-log-page
+) .page-shell {
+  display: block !important;
+  overflow: visible !important;
+}
+
+body.coal-theme :is(
+  .production-operation-page,
+  .process-flow-page,
+  .dispatch-log-page
+) .section-panel {
+  margin-bottom: 14px !important;
+}
+
+body.coal-theme :is(
+  .production-operation-page,
+  .process-flow-page,
+  .dispatch-log-page
+) .section-hero {
+  margin-bottom: 14px !important;
+}
+
+body.coal-theme :is(
+  .production-operation-page,
+  .dispatch-log-page
+) .stats-grid {
+  margin-bottom: 14px !important;
+  gap: 12px !important;
+}
+
+body.coal-theme .process-flow-page .viewport-main-grid {
+  display: grid !important;
+  grid-template-columns: 1.1fr 0.9fr 1.2fr !important;
+  grid-template-rows: minmax(280px, auto) !important;
+  gap: 12px !important;
+  overflow: visible !important;
+}
+
+body.coal-theme .process-flow-page .viewport-main-grid > .section-panel {
+  min-height: 280px;
+}
+
+body.coal-theme .planning-page .page-shell {
+  display: block !important;
+  overflow: visible !important;
+}
+
+body.coal-theme .planning-page .page-head,
+body.coal-theme .planning-page .kpi-grid,
+body.coal-theme .planning-page .panel-grid {
+  margin-bottom: 14px !important;
+}
+
+body.coal-theme .planning-page .panel-grid {
+  grid-template-columns: 1.2fr 0.8fr !important;
+}
+
+body.coal-theme .shift-page .panel {
+  margin-bottom: 0 !important;
+}
+
+@media (max-width: 1400px) {
+  body.coal-theme .process-flow-page .viewport-main-grid {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: auto auto !important;
+  }
+
+  body.coal-theme .process-flow-page .viewport-main-grid > .section-panel:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 1200px) {
+  body.coal-theme .planning-page .panel-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 质量能耗组页面：解除全局单屏裁切 */
+body.coal-theme :is(
+  .quality-entry-page,
+  .quality-report-page,
+  .energy-manage-page,
+  .sales-stat-page,
+  .quality-center-page
+) {
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 0 !important;
+  overflow: auto !important;
+  padding: 12px 14px 18px !important;
+}
+
+body.coal-theme :is(
+  .quality-entry-page,
+  .quality-report-page,
+  .sales-stat-page
+) .page-shell {
+  display: block !important;
+  height: auto !important;
+  overflow: visible !important;
+  width: min(100%, 1680px);
+  margin: 0 auto;
+}
+
+body.coal-theme :is(
+  .quality-entry-page,
+  .quality-report-page
+) .section-panel {
+  margin-bottom: 14px !important;
+}
+
+body.coal-theme :is(
+  .quality-entry-page,
+  .quality-report-page
+) .stats-grid {
+  margin-bottom: 14px !important;
+}
+
+body.coal-theme .quality-center-page .page-layout,
+body.coal-theme .quality-center-page .page-main,
+body.coal-theme .quality-center-page .quality-board {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+body.coal-theme .quality-center-page .footer-stats {
+  margin-bottom: 6px;
+}
+
+/* 质量能耗 6 页：统一背景与卡片视觉基线 */
+body.coal-theme :is(
+  .quality-center-page,
+  .quality-entry-page,
+  .quality-report-page,
+  .energy-manage-page,
+  .storage-v2,
+  .sales-stat-page
+) {
+  background: #091019 !important;
+  color: #eef6ff !important;
+}
+
+body.coal-theme :is(
+  .quality-center-page,
+  .quality-entry-page,
+  .quality-report-page,
+  .energy-manage-page,
+  .storage-v2,
+  .sales-stat-page
+) :is(.page-shell, .content-grid, .page-layout, .page-main, .quality-board, .hero, .page-hero, .page-head, .section-hero) {
+  width: min(100%, 1680px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+body.coal-theme :is(
+  .quality-center-page,
+  .quality-entry-page,
+  .quality-report-page,
+  .energy-manage-page,
+  .storage-v2,
+  .sales-stat-page
+) :is(
+  .hero,
+  .page-hero,
+  .page-head,
+  .section-hero,
+  .section-panel,
+  .panel,
+  .kpi-card,
+  .stat-card,
+  .recommend-card,
+  .device-card,
+  .footer-card,
+  .chart-card,
+  .table-panel
+) {
+  background: rgba(8, 19, 30, 0.92) !important;
+  border: 1px solid rgba(96, 183, 255, 0.14) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(140, 205, 255, 0.06) !important;
+}
+
+body.coal-theme .storage-v2 {
+  width: min(100%, 1680px) !important;
+  padding: 12px 14px 18px !important;
+  background: #091019 !important;
+}
+

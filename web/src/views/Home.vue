@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="portal-home">
     <header class="hero-shell">
       <div class="hero-copy">
@@ -7,8 +7,8 @@
         <h1>金海泽地选煤厂综合管控平台</h1>
         <p class="hero-summary">旧版业务风入口，侧重表格、台账、录入和报表，适合功能核对与流程演示。</p>
         <div class="hero-actions">
-          <router-link class="primary-link" to="/coal/dashboard">进入监控中心</router-link>
-          <router-link class="secondary-link" to="/coal/production">查看生产管理</router-link>
+          <router-link class="primary-link" to="/jzt/coal/dashboard">进入监控中心</router-link>
+          <router-link class="secondary-link" to="/jzt/coal/production">查看生产管理</router-link>
         </div>
       </div>
 
@@ -101,35 +101,35 @@ const runtimeStatus = [
 ]
 
 const primaryEntries = [
-  { path: '/coal/dashboard', title: '监控中心', desc: '总览、告警、关键指标和生产大屏' },
-  { path: '/coal/production', title: '生产管理', desc: '计划、执行、工艺与统计' },
-  { path: '/coal/equipment', title: '设备管理', desc: '设备台账、状态和维护' },
-  { path: '/coal/quality', title: '质量管理', desc: '灰分、水分、硫分和分析' },
+  { path: '/jzt/coal/dashboard', title: '监控中心', desc: '总览、告警、关键指标和生产大屏' },
+  { path: '/jzt/coal/production', title: '生产管理', desc: '计划、执行、工艺与统计' },
+  { path: '/jzt/coal/equipment', title: '设备管理', desc: '设备台账、状态和维护' },
+  { path: '/jzt/coal/quality', title: '质量管理', desc: '灰分、水分、硫分和分析' },
 ]
 
 const topicEntries = [
-  { path: '/coal/storage', title: '储装管理', desc: '入厂、销售、装车和库存' },
-  { path: '/coal/energy', title: '消耗大屏', desc: '水、电、介质、药剂对比' },
-  { path: '/coal/dispatch', title: '调度管理', desc: '当班事项、事故记录和遗留问题' },
-  { path: '/coal/decision', title: '智能决策', desc: '工艺评估、预测与建议输出' },
-  { path: '/coal/monitor', title: '平台监测', desc: '人员、环境、接口与性能监测' },
-  { path: '/coal/settings', title: '系统设置', desc: '用户、角色、点位和审计' },
+  { path: '/jzt/coal/storage', title: '储装管理', desc: '入厂、销售、装车和库存' },
+  { path: '/jzt/coal/energy', title: '消耗大屏', desc: '水、电、介质、药剂对比' },
+  { path: '/jzt/coal/dispatch', title: '调度管理', desc: '当班事项、事故记录和遗留问题' },
+  { path: '/jzt/coal/decision', title: '智能决策', desc: '工艺评估、预测与建议输出' },
+  { path: '/jzt/coal/monitor', title: '平台监测', desc: '人员、环境、接口与性能监测' },
+  { path: '/jzt/coal/settings', title: '系统设置', desc: '用户、角色、点位和审计' },
 ]
 
 const extensionEntries = [
-  { path: '/coal/process-flow', title: '工艺流程专项', desc: '节点状态、负荷、告警和处置建议' },
-  { path: '/coal/safety-health', title: '安全与健康', desc: '人员安全、风险分级和健康闭环' },
-  { path: '/coal/process-check', title: '生产技术检查', desc: '检查台账、工艺稽核与实验记录联动' },
-  { path: '/coal/material-tracking', title: '原材料跟踪', desc: '入库、领用、出库和库存追踪' },
-  { path: '/coal/quality-report', title: '质量报表', desc: '日报、周报、月报统一输出' },
-  { path: '/coal/medium', title: '介质消耗', desc: '介耗统计、异常提醒和报表' },
-  { path: '/coal/reagent', title: '药剂消耗', desc: '药剂用量、单耗和时段对比' },
-  { path: '/coal/water', title: '水消耗', desc: '补水汇总、历史统计和异常提示' },
-  { path: '/coal/power', title: '电力消耗', desc: '配电状态、电耗和告警' },
-  { path: '/coal/grease', title: '油脂消耗', desc: '润滑领用、班报月报和异常追踪' },
-  { path: '/coal/air', title: '用风量', desc: '风量采集、单耗测算和考核支撑' },
-  { path: '/coal/planning', title: '生产计划统计', desc: '计划执行、指标汇总和报表' },
-  { path: '/coal/mechanical', title: '机电设备管理', desc: '档案、动态数据和问题闭环' },
+  { path: '/jzt/coal/process-flow', title: '工艺流程专项', desc: '节点状态、负荷、告警和处置建议' },
+  { path: '/jzt/coal/safety-health', title: '安全与健康', desc: '人员安全、风险分级和健康闭环' },
+  { path: '/jzt/coal/process-check', title: '生产技术检查', desc: '检查台账、工艺稽核与实验记录联动' },
+  { path: '/jzt/coal/material-tracking', title: '原材料跟踪', desc: '入库、领用、出库和库存追踪' },
+  { path: '/jzt/coal/quality-report', title: '质量报表', desc: '日报、周报、月报统一输出' },
+  { path: '/jzt/coal/medium', title: '介质消耗', desc: '介耗统计、异常提醒和报表' },
+  { path: '/jzt/coal/reagent', title: '药剂消耗', desc: '药剂用量、单耗和时段对比' },
+  { path: '/jzt/coal/water', title: '水消耗', desc: '补水汇总、历史统计和异常提示' },
+  { path: '/jzt/coal/power', title: '电力消耗', desc: '配电状态、电耗和告警' },
+  { path: '/jzt/coal/grease', title: '油脂消耗', desc: '润滑领用、班报月报和异常追踪' },
+  { path: '/jzt/coal/air', title: '用风量', desc: '风量采集、单耗测算和考核支撑' },
+  { path: '/jzt/coal/planning', title: '生产计划统计', desc: '计划执行、指标汇总和报表' },
+  { path: '/jzt/coal/mechanical', title: '机电设备管理', desc: '档案、动态数据和问题闭环' },
 ]
 
 const updateTime = () => {
@@ -157,7 +157,7 @@ onUnmounted(() => {
 
 <style scoped>
 .portal-home {
-  min-height: 100vh;
+  height:100%;overflow:hidden;
   padding: 20px;
   background:
     radial-gradient(circle at top right, rgba(73, 146, 214, 0.14), transparent 22%),

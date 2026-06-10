@@ -1,5 +1,5 @@
-<template>
-  <div class="coal-page section-page">
+﻿<template>
+  <div class="coal-page section-page quality-entry-page">
     <CoalQuickBar
       title="煤质离线录入"
       subtitle="对应最新需求中的煤质离线录入、产品化验数据和日报周报月报基础台账，先把录入、编辑和统计页落完整。"
@@ -20,26 +20,34 @@
 
       <section class="stats-grid">
         <article class="stat-card" v-for="item in stats" :key="item.label">
-          <span>{{ item.label }}</span>
-          <strong>{{ item.value }}</strong>
-          <small>{{ item.note }}</small>
+          <div class="stat-main">
+            <span class="stat-label">{{ item.label }}</span>
+            <strong>{{ item.value }}</strong>
+          </div>
+          <div class="stat-side">
+            <small class="stat-tag">{{ item.note }}</small>
+            <span class="stat-trend" :class="item.trend">
+              {{ item.trend === 'up' ? '▲' : '▼' }} {{ item.delta }}
+            </span>
+          </div>
         </article>
       </section>
 
       <section class="section-panel filters">
-        <el-select v-model="filterType" clearable placeholder="样品类型" style="width: 180px">
+        <el-select v-model="filterType" clearable placeholder="样品类型" style="width: 140px" size="small">
           <el-option label="原煤" value="原煤" />
           <el-option label="精煤" value="精煤" />
           <el-option label="洗混" value="洗混" />
         </el-select>
-        <el-select v-model="filterStatus" clearable placeholder="状态" style="width: 180px">
+        <el-select v-model="filterStatus" clearable placeholder="状态" style="width: 120px" size="small">
           <el-option label="已审核" value="已审核" />
           <el-option label="待复核" value="待复核" />
         </el-select>
-        <el-button type="primary" @click="loadRows">查询</el-button>
+        <el-button type="primary" size="small" @click="loadRows">查询</el-button>
       </section>
 
-      <section class="section-panel">
+      <div class="viewport-main-grid viewport-main-grid--2col">
+      <section class="section-panel chart-card">
         <div class="panel-head">
           <div>
             <h2>化验趋势</h2>
@@ -49,14 +57,14 @@
         <div ref="chartEl" class="chart-box"></div>
       </section>
 
-      <section class="section-panel">
+      <section class="section-panel table-panel">
         <div class="panel-head">
           <div>
             <h2>化验记录台账</h2>
             <p>字段覆盖样品编号、时间、灰分、水分、硫分和热值。</p>
           </div>
         </div>
-        <el-table :data="rows" class="records-table">
+        <el-table :data="rows" class="records-table" size="small" stripe>
           <el-table-column prop="testNo" label="化验编号" min-width="140" />
           <el-table-column prop="sampleType" label="样品类型" width="100" />
           <el-table-column prop="sampleName" label="样品名称" min-width="140" />
@@ -69,12 +77,13 @@
           <el-table-column prop="status" label="状态" min-width="100" />
           <el-table-column label="操作" width="170" fixed="right">
             <template #default="{ row }">
-              <el-button type="primary" link @click="openEditDialog(row)">编辑</el-button>
-              <el-button type="danger" link @click="removeRow(row.id!)">删除</el-button>
+              <el-button class="action-edit" type="primary" link @click="openEditDialog(row)">编辑</el-button>
+              <el-button class="action-delete" type="danger" link @click="removeRow(row.id!)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </section>
+      </div>
     </section>
 
     <el-dialog v-model="showDialog" :title="editingId ? '编辑化验记录' : '新增化验记录'" width="720px">
@@ -157,10 +166,10 @@ const stats = computed(() => {
   const avgMoisture = total ? (rows.value.reduce((sum, item) => sum + item.moisture, 0) / total).toFixed(2) : '0.00'
   const pending = rows.value.filter(item => item.status === '待复核').length
   return [
-    { label: '化验记录数', value: `${total} 条`, note: '离线录入台账' },
-    { label: '平均灰分', value: `${avgAsh}%`, note: '用于质量分析' },
-    { label: '平均水分', value: `${avgMoisture}%`, note: '用于质量日报' },
-    { label: '待复核', value: `${pending} 条`, note: '用于复核提醒' },
+    { label: '化验记录数', value: `${total} 条`, note: '离线录入台账', trend: 'up' as const, delta: '较昨日 +1' },
+    { label: '平均灰分', value: `${avgAsh}%`, note: '用于质量分析', trend: 'down' as const, delta: '较昨日 -0.3%' },
+    { label: '平均水分', value: `${avgMoisture}%`, note: '用于质量日报', trend: 'up' as const, delta: '较昨日 +0.2%' },
+    { label: '待复核', value: `${pending} 条`, note: '用于复核提醒', trend: 'down' as const, delta: '较昨日 -1' },
   ]
 })
 
@@ -182,12 +191,42 @@ function renderChart() {
   chart.setOption({
     tooltip: { trigger: 'axis' },
     legend: { data: ['灰分', '水分'], textStyle: { color: '#9fb4c9' } },
-    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    grid: { left: 52, right: 24, top: 44, bottom: 36, containLabel: true },
     xAxis: { type: 'category', data: rows.value.map(item => item.sampleTime.slice(5, 16)), axisLabel: { color: '#9fb4c9' } },
-    yAxis: { type: 'value', axisLabel: { color: '#9fb4c9' }, splitLine: { lineStyle: { color: 'rgba(120,160,200,0.12)' } } },
+    yAxis: {
+      type: 'value',
+      splitNumber: 6,
+      axisLabel: { color: '#9fb4c9', margin: 12 },
+      splitLine: { lineStyle: { color: 'rgba(120,160,200,0.16)' } },
+    },
     series: [
-      { name: '灰分', type: 'line', smooth: true, data: rows.value.map(item => item.ashContent), lineStyle: { color: '#4ec9ff', width: 3 }, itemStyle: { color: '#4ec9ff' } },
-      { name: '水分', type: 'bar', data: rows.value.map(item => item.moisture), itemStyle: { color: '#2fe0a5', borderRadius: [6, 6, 0, 0] } },
+      {
+        name: '灰分',
+        type: 'line',
+        smooth: true,
+        data: rows.value.map(item => item.ashContent),
+        lineStyle: { color: '#4ec9ff', width: 3 },
+        itemStyle: { color: '#4ec9ff' },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(78, 201, 255, 0.28)' },
+            { offset: 1, color: 'rgba(78, 201, 255, 0.02)' },
+          ]),
+        },
+      },
+      {
+        name: '水分',
+        type: 'bar',
+        barWidth: '30%',
+        data: rows.value.map(item => item.moisture),
+        itemStyle: {
+          borderRadius: [6, 6, 0, 0],
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: '#53f5b4' },
+            { offset: 1, color: '#118d5e' },
+          ]),
+        },
+      },
     ],
   })
 }
@@ -245,24 +284,167 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.section-page{min-height:100vh;padding:0 20px 24px;background:#091019;color:#eef6ff}
-.page-shell{width:min(100%,1680px);margin:0 auto}
-.section-hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:20px}
-.section-eyebrow{margin:0 0 10px;color:#72d8ff;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
-.section-hero h1{margin:0;font-size:38px}
-.section-text{max-width:820px;margin:12px 0 0;color:#96aabc;line-height:1.7}
-.hero-actions{display:flex;gap:12px}
-.section-panel{padding:22px;border-radius:20px;border:1px solid rgba(122,190,255,.12);background:rgba(12,20,31,.92);box-shadow:0 18px 40px rgba(0,0,0,.16);margin-bottom:20px}
-.filters{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
-.stat-card{padding:18px;border-radius:18px;border:1px solid rgba(122,190,255,.12);background:rgba(12,20,31,.92)}
-.stat-card span{display:block;color:#97aabc}
-.stat-card strong{display:block;margin-top:14px;font-size:30px}
-.stat-card small{display:block;margin-top:10px;color:#6ec8ff}
-.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:16px}
-.panel-head h2{margin:0;font-size:24px}
-.panel-head p{margin:8px 0 0;color:#8fa8bc}
-.chart-box{height:320px}
-@media (max-width: 1200px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
-@media (max-width: 768px){.stats-grid{grid-template-columns:1fr}}
+.section-page {
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px 14px 18px;
+  background: #091019;
+  color: #eef6ff;
+}
+
+.page-shell {
+  width: min(100%, 1680px);
+  height: auto;
+  min-height: 0;
+  margin: 0 auto;
+}
+
+.section-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-hero h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.section-panel {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(122, 190, 255, 0.12);
+  background: rgba(12, 20, 31, 0.92);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  max-height: none !important;
+}
+
+.stat-card {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(122, 190, 255, 0.12);
+  background: rgba(12, 20, 31, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stat-main {
+  min-width: 0;
+}
+
+.stat-side {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+}
+
+.stat-label {
+  display: block;
+  color: #97aabc;
+  font-size: 12px;
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 24px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.stat-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: #9fd3ea;
+  background: rgba(37, 65, 92, 0.68);
+}
+
+.stat-trend {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.stat-trend.up {
+  color: #38d39f;
+}
+
+.stat-trend.down {
+  color: #ff8c96;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex: 0 0 auto;
+}
+
+.panel-head h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.chart-box {
+  flex: 1;
+  min-height: 320px;
+  height: auto;
+}
+
+.table-panel :deep(.el-table) {
+  flex: 1;
+  min-height: 320px;
+}
+
+.table-panel :deep(.el-table__body-wrapper) {
+  max-height: 100%;
+}
+
+.table-panel :deep(.el-table .el-table__cell) {
+  padding: 16px 0;
+}
+
+.records-table :deep(.el-table__row--striped td.el-table__cell) {
+  background: rgba(23, 44, 63, 0.32);
+}
+
+.action-edit {
+  color: #59c8ff !important;
+}
+
+.action-delete {
+  color: rgba(255, 126, 138, 0.95) !important;
+}
+
+.chart-card,
+.table-panel {
+  min-height: 460px;
+}
 </style>

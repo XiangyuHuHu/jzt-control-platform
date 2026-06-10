@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="dashboard">
     <header class="header">
       <div class="header-left">
@@ -324,7 +324,7 @@ onUnmounted(() => {
 
 <style scoped>
 .dashboard {
-  min-height: 100vh;
+  height:100%;overflow:hidden;
   background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1b2a 100%);
   color: #fff;
   display: flex;

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="coal-page-v2 monitor-page">
     <div class="page-layout">
       <main class="page-main">
@@ -31,7 +31,7 @@
           </article>
         </section>
 
-        <section class="main-grid">
+        <div class="monitor-body">
           <article class="panel map-panel">
             <div class="panel-head">
               <h3>厂区 2D 区域监控与人员分布</h3>
@@ -40,7 +40,6 @@
                 <span>巡检员：8</span>
               </div>
             </div>
-
             <div class="map-stage">
               <div class="map-placeholder">2D 厂区平面示意</div>
               <span class="pulse p1"></span>
@@ -76,41 +75,6 @@
               </article>
             </div>
           </article>
-        </section>
-
-        <section class="bottom-grid">
-          <article class="panel task-panel">
-            <div class="panel-head">
-              <h3>当前巡检任务</h3>
-              <button type="button" class="ghost-btn" @click="notify('已打开全部巡检任务列表')">查看全部任务</button>
-            </div>
-
-            <table class="task-table">
-              <thead>
-                <tr>
-                  <th>任务名称</th>
-                  <th>巡检员</th>
-                  <th>进度</th>
-                  <th>状态</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in tasks" :key="item.name">
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.user }}</td>
-                  <td>
-                    <div class="progress"><div class="progress-fill" :style="{ width: item.progress }"></div></div>
-                    <span>{{ item.progress }}</span>
-                  </td>
-                  <td>
-                    <span v-if="item.status === '已完成'" class="task-status done">已完成</span>
-                    <button v-else-if="item.status === '等待开始'" type="button" class="task-action" @click="startTask(item)">开始巡检</button>
-                    <button v-else type="button" class="task-action running" @click="completeTask(item)">标记完成</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </article>
 
           <article class="panel alert-panel">
             <div class="panel-head">
@@ -127,7 +91,41 @@
               </article>
             </div>
           </article>
-        </section>
+
+          <article class="panel task-panel">
+            <div class="panel-head">
+              <h3>当前巡检任务</h3>
+              <button type="button" class="ghost-btn" @click="notify('已打开全部巡检任务列表')">查看全部</button>
+            </div>
+            <div class="task-table-wrap">
+              <table class="task-table">
+                <thead>
+                  <tr>
+                    <th>任务名称</th>
+                    <th>巡检员</th>
+                    <th>进度</th>
+                    <th>状态</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in tasks" :key="item.name">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.user }}</td>
+                    <td>
+                      <div class="progress"><div class="progress-fill" :style="{ width: item.progress }"></div></div>
+                      <span>{{ item.progress }}</span>
+                    </td>
+                    <td>
+                      <span v-if="item.status === '已完成'" class="task-status done">已完成</span>
+                      <button v-else-if="item.status === '等待开始'" type="button" class="task-action" @click="startTask(item)">开始</button>
+                      <button v-else type="button" class="task-action running" @click="completeTask(item)">完成</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </div>
       </main>
     </div>
   </div>
@@ -201,45 +199,425 @@ const notify = (message: string) => ElMessage.success(message)
 </script>
 
 <style scoped>
-.coal-page-v2{min-height:100vh;background:#091019;color:#eef6ff}
-.page-layout{width:min(100%,1800px);margin:0 auto;display:grid;grid-template-columns:1fr;gap:24px;padding:24px}
-.panel,.stat-card{border:1px solid rgba(122,190,255,.1);background:rgba(12,20,31,.92);box-shadow:0 18px 40px rgba(0,0,0,.18)}
-.hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-end;margin-bottom:18px}
-.eyebrow{margin:0 0 10px;color:#78cfff;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
-.hero h1{margin:0;font-size:46px;line-height:1.05}
-.hero-text{max-width:760px;margin:12px 0 0;color:#97aac0;font-size:16px;line-height:1.7}
-.hero-tips{display:flex;gap:12px}
-.tip-card{min-width:160px;padding:16px;border-radius:16px;background:#141f2d}
-.tip-card span{display:block;color:#92a6bc;font-size:12px}
-.tip-card strong{display:block;margin-top:8px;font-size:26px}
-.tip-card strong.danger{color:#ff7a82}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.stat-card{display:flex;justify-content:space-between;align-items:flex-start;padding:22px;border-radius:24px}
-.stat-card span{display:block;color:#97a4b4;font-size:14px}.stat-card strong{display:block;margin:18px 0 10px;font-size:54px;line-height:1}.stat-card small{color:#c4d0db;font-size:16px}
-.stat-card.green{box-shadow:inset 4px 0 0 #18f0bf,0 18px 40px rgba(0,0,0,.18)}.stat-card.blue{box-shadow:inset 4px 0 0 #67d8ff,0 18px 40px rgba(0,0,0,.18)}.stat-card.yellow{box-shadow:inset 4px 0 0 #f9c76a,0 18px 40px rgba(0,0,0,.18)}.stat-card.red{box-shadow:inset 4px 0 0 #ff6f73,0 18px 40px rgba(0,0,0,.18)}
-.main-grid,.bottom-grid{display:grid;grid-template-columns:1.65fr .75fr;gap:18px;margin-top:18px}
-.panel{padding:22px;border-radius:24px}
-.panel-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:14px}
-.panel-head h3{margin:0;font-size:26px}
-.map-tags{display:flex;gap:12px}.map-tags span{padding:8px 12px;border-radius:999px;background:#1e2631;color:#afc1d0}
-.map-stage{position:relative;height:430px;border-radius:18px;background:#0f141b;overflow:hidden}
+.coal-page-v2 {
+  height: 100%;
+  overflow: hidden;
+  background: #091019;
+  color: #eef6ff;
+}
+
+.page-main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.panel,
+.stat-card {
+  border: 1px solid rgba(122, 190, 255, 0.1);
+  background: rgba(12, 20, 31, 0.92);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  border-radius: 14px;
+  padding: 12px 14px;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-grid {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.stat-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 12px;
+}
+
+.stat-card span {
+  font-size: 12px;
+  color: #97a4b4;
+}
+
+.stat-card strong {
+  display: block;
+  margin: 6px 0 4px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.stat-card small {
+  font-size: 11px;
+  color: #c4d0db;
+}
+
+.stat-card :deep(.el-icon) {
+  font-size: 20px;
+  color: #67d8ff;
+  opacity: 0.7;
+}
+
+.monitor-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  overflow: hidden;
+}
+
+.map-panel {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.alert-panel {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.ai-panel {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.task-panel {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.hero-tips {
+  display: flex;
+  gap: 8px;
+}
+
+.tip-card {
+  min-width: 120px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #141f2d;
+}
+
+.tip-card span {
+  display: block;
+  color: #92a6bc;
+  font-size: 11px;
+}
+
+.tip-card strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+}
+
+.tip-card strong.danger {
+  color: #ff7a82;
+}
+
+.panel-head h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.map-tags {
+  display: flex;
+  gap: 8px;
+}
+
+.map-tags span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #1e2631;
+  color: #afc1d0;
+  font-size: 11px;
+}
+
+.map-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: 12px;
+  background: #0f141b;
+  overflow: hidden;
+}
 .map-placeholder{position:absolute;left:18px;top:16px;color:#8895a7;font-size:18px}
 .pulse{position:absolute;width:18px;height:18px;border-radius:50%;background:#19f0c1;box-shadow:0 0 0 6px rgba(25,240,193,.12),0 0 16px rgba(25,240,193,.8)}.pulse.blue{background:#68d8ff;box-shadow:0 0 0 6px rgba(104,216,255,.12),0 0 16px rgba(104,216,255,.8)}.pulse.danger{background:#ff6f73;box-shadow:0 0 0 6px rgba(255,111,115,.12),0 0 16px rgba(255,111,115,.8)}
 .p1{left:38%;top:34%}.p2{left:63%;top:66%}.p3{left:70%;top:82%}
-.activity-list{position:absolute;right:10px;top:0;width:210px;height:100%;padding:12px;background:#1b222c}
-.activity-card{display:flex;justify-content:space-between;gap:10px;padding:12px 10px;margin-bottom:10px;border-left:3px solid #3adcb7;background:#202732}.activity-card.info{border-left-color:#68d8ff}.activity-card.danger{border-left-color:#ff6f73}.activity-card strong{display:block;margin-bottom:4px}.activity-card p{margin:0;color:#dbe6f1}
-.ai-cards{display:grid;gap:18px}.ai-card{border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;background:#1b222c}
-.ai-image{height:176px}.ai-image.image-warn{background:radial-gradient(circle at 58% 40%,#f9cb68,#8d5516 36%,#23160f 70%)}.ai-image.image-heat{background:radial-gradient(circle at 35% 28%,#676767,#111 56%,#321818 100%)}
-.ai-copy{padding:14px}.ai-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px}.ai-copy p{margin:0 0 12px;color:#cad6e0;line-height:1.5}
-.ai-tag{display:inline-flex;padding:6px 10px;border-radius:6px;font-size:12px}.ai-tag.danger{background:#ff7b7f;color:#fff}.ai-tag.warn{background:#f7c463;color:#3b2800}
-.ghost-btn{height:36px;padding:0 14px;border:1px solid rgba(104,216,255,.35);border-radius:8px;background:transparent;color:#68d8ff;cursor:pointer}
-.task-table{width:100%;border-collapse:collapse}.task-table th,.task-table td{padding:14px 16px;text-align:left}.task-table thead th{background:#111821;color:#96a4b7}
-.progress{display:inline-block;width:155px;height:10px;margin-right:10px;border-radius:999px;background:#2b3240;vertical-align:middle}.progress-fill{height:100%;border-radius:inherit;background:#78dcff}
-.task-status{display:inline-block;padding:6px 10px;border-radius:6px;font-size:13px}.task-status.running{background:rgba(24,240,191,.18);color:#18f0bf}.task-status.idle{background:#2d3440;color:#c8d4de}.task-status.done{background:rgba(103,216,255,.15);color:#67d8ff}
-.task-action{height:36px;padding:0 14px;border:1px solid #2f93ba;background:transparent;color:#86dfff;border-radius:8px;cursor:pointer}.task-action:hover{background:rgba(104,216,255,.1)}.task-action.running{border-color:#18f0bf;color:#18f0bf}
-.alert-list{display:grid;gap:18px}.alert-card{padding:18px;border-radius:16px;background:#1b222c}.alert-card.danger{box-shadow:inset 4px 0 0 #ff6f73}.alert-card.warn{box-shadow:inset 4px 0 0 #f7c463}.alert-card.normal{box-shadow:inset 4px 0 0 #8f99a6}.alert-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px}.alert-card p{margin:0;color:#cad6e0;line-height:1.6}
-.alert-ack-btn{margin-top:12px;height:34px;padding:0 16px;border:1px solid rgba(255,111,115,.4);border-radius:8px;background:transparent;color:#ff8b90;cursor:pointer}.alert-ack-btn:hover{background:rgba(255,111,115,.1)}
-@media (max-width: 1450px){
-  .page-layout,.stats-grid,.main-grid,.bottom-grid{grid-template-columns:1fr}
+.activity-list {
+  position: absolute;
+  right: 8px;
+  top: 0;
+  width: 180px;
+  height: 100%;
+  padding: 8px;
+  background: rgba(27, 34, 44, 0.92);
+  overflow: hidden;
+}
+
+.activity-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+  margin-bottom: 6px;
+  border-left: 3px solid #3adcb7;
+  background: #202732;
+  font-size: 11px;
+}
+
+.activity-card.info {
+  border-left-color: #68d8ff;
+}
+
+.activity-card.danger {
+  border-left-color: #ff6f73;
+}
+
+.activity-card strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 12px;
+}
+
+.activity-card p {
+  margin: 0;
+  color: #dbe6f1;
+}
+
+.ai-cards {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  overflow: hidden;
+}
+
+.ai-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #1b222c;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ai-image {
+  flex: 0 0 56px;
+  min-height: 56px;
+}
+
+.ai-image.image-warn {
+  background: radial-gradient(circle at 58% 40%, #f9cb68, #8d5516 36%, #23160f 70%);
+}
+
+.ai-image.image-heat {
+  background: radial-gradient(circle at 35% 28%, #676767, #111 56%, #321818 100%);
+}
+
+.ai-copy {
+  padding: 8px 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.ai-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.ai-copy p {
+  margin: 0 0 6px;
+  color: #cad6e0;
+  line-height: 1.4;
+  font-size: 11px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ai-tag {
+  display: inline-flex;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.ai-tag.danger {
+  background: #ff7b7f;
+  color: #fff;
+}
+
+.ai-tag.warn {
+  background: #f7c463;
+  color: #3b2800;
+}
+
+.ghost-btn {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(104, 216, 255, 0.35);
+  border-radius: 8px;
+  background: transparent;
+  color: #68d8ff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.task-table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.task-table th,
+.task-table td {
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.task-table thead th {
+  background: #111821;
+  color: #96a4b7;
+}
+
+.progress {
+  display: inline-block;
+  width: 72px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 999px;
+  background: #2b3240;
+  vertical-align: middle;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #78dcff;
+}
+
+.task-status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.task-status.done {
+  background: rgba(103, 216, 255, 0.15);
+  color: #67d8ff;
+}
+
+.task-action {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid #2f93ba;
+  background: transparent;
+  color: #86dfff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.task-action.running {
+  border-color: #18f0bf;
+  color: #18f0bf;
+}
+
+.alert-list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.alert-card {
+  flex: 1;
+  min-height: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #1b222c;
+  overflow: hidden;
+}
+
+.alert-card.danger {
+  box-shadow: inset 4px 0 0 #ff6f73;
+}
+
+.alert-card.warn {
+  box-shadow: inset 4px 0 0 #f7c463;
+}
+
+.alert-card.normal {
+  box-shadow: inset 4px 0 0 #8f99a6;
+}
+
+.alert-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.alert-card p {
+  margin: 0;
+  color: #cad6e0;
+  line-height: 1.45;
+  font-size: 11px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.alert-ack-btn {
+  margin-top: 8px;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 111, 115, 0.4);
+  border-radius: 8px;
+  background: transparent;
+  color: #ff8b90;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+@media (max-width: 1200px) {
+  .monitor-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+  }
+
+  .map-panel,
+  .alert-panel,
+  .ai-panel,
+  .task-panel {
+    grid-column: 1;
+    grid-row: auto;
+  }
 }
 </style>

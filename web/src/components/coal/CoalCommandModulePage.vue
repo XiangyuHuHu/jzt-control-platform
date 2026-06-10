@@ -27,41 +27,42 @@
       </article>
     </section>
 
-    <section class="main-grid">
-      <article class="panel">
-        <div class="panel-head">
-          <div>
-            <h2>功能总览</h2>
-            <p>{{ config.scenario }}</p>
-          </div>
-        </div>
-        <div class="chip-list">
-          <span v-for="item in config.highlights" :key="item" class="chip">{{ item }}</span>
-        </div>
-      </article>
-
-      <article class="panel">
-        <div class="panel-head">
-          <div>
-            <h2>{{ config.chartTitle }}</h2>
-            <p>按当前模块关键过程进行可视化展示</p>
-          </div>
-        </div>
-        <div class="bar-list">
-          <div v-for="item in config.chartSeries" :key="item.label" class="bar-row">
-            <div class="bar-meta">
-              <span>{{ item.label }}</span>
-              <strong>{{ item.value }}%</strong>
-            </div>
-            <div class="bar-track">
-              <div class="bar-fill" :style="{ width: `${item.value}%`, background: item.color }"></div>
+    <div class="command-body">
+      <section class="main-grid">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>功能总览</h2>
+              <p>{{ config.scenario }}</p>
             </div>
           </div>
-        </div>
-      </article>
-    </section>
+          <div class="chip-list">
+            <span v-for="item in config.highlights" :key="item" class="chip">{{ item }}</span>
+          </div>
+        </article>
 
-    <section class="panel table-panel">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>{{ config.chartTitle }}</h2>
+              <p>按当前模块关键过程进行可视化展示</p>
+            </div>
+          </div>
+          <div class="bar-list">
+            <div v-for="item in config.chartSeries" :key="item.label" class="bar-row">
+              <div class="bar-meta">
+                <span>{{ item.label }}</span>
+                <strong>{{ item.value }}%</strong>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill" :style="{ width: `${item.value}%`, background: item.color }"></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel table-panel">
       <div class="panel-head">
         <div>
           <h2>{{ config.tableTitle }}</h2>
@@ -84,7 +85,8 @@
           </tr>
         </tbody>
       </table>
-    </section>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -130,9 +132,12 @@ const metricLevelClass = (metric: ModuleMetric) => {
 
 <style scoped>
 .command-page {
-  min-height: 100%;
+  height: 100%;
   width: min(100%, 1680px);
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   --cc-gap: var(--control-gap, 16px);
   --cc-padding: var(--control-padding, 16px);
   --cc-radius: var(--control-radius, 16px);
@@ -280,11 +285,22 @@ const metricLevelClass = (metric: ModuleMetric) => {
   color: #ff8f8f;
 }
 
+.command-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--cc-gap);
+  overflow: hidden;
+}
+
 .main-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--cc-gap);
-  margin-top: var(--cc-gap);
+  min-height: 0;
+  overflow: hidden;
 }
 
 .panel {
@@ -337,7 +353,17 @@ const metricLevelClass = (metric: ModuleMetric) => {
 }
 
 .table-panel {
-  margin-top: var(--cc-gap);
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-panel .data-table {
+  flex: 1;
+  min-height: 0;
+  display: block;
+  overflow: hidden;
 }
 
 .text-btn {

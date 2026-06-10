@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="login-page">
     <div class="login-background">
       <div class="bg-gradient"></div>
@@ -157,7 +157,7 @@ const handleLogin = async () => {
 
       if (loginForm.username === 'admin' && loginForm.password === 'admin123') {
         ElMessage.success('登录成功，欢迎回来')
-        router.push('/coal/dashboard')
+        router.push('/jzt/coal/dashboard')
       } else {
         showCaptcha.value = true
         refreshCaptcha()
@@ -176,7 +176,7 @@ refreshCaptcha()
 
 <style scoped>
 .login-page {
-  min-height: 100vh;
+  height:100%;overflow:hidden;
   background: #0a1628;
   position: relative;
   overflow: hidden;
@@ -205,7 +205,7 @@ refreshCaptcha()
 .login-container {
   position: relative;
   display: flex;
-  min-height: 100vh;
+  height:100%;overflow:hidden;
 }
 
 .login-left {

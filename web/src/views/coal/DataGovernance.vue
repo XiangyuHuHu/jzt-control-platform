@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="data-page">
     <CoalQuickBar
       title="数据治理中心"
@@ -133,7 +133,7 @@ const getColor = (score: number) => {
 
 <style scoped>
 .data-page {
-  min-height: 100vh;
+  height:100%;overflow:hidden;
   padding: 0 20px 24px;
   background: #091019;
   color: #eef6ff;

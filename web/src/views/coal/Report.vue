@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="report-page">
     <section class="page-hero">
       <div>
@@ -56,5 +56,5 @@ function printReport() {
 </script>
 
 <style scoped>
-.report-page{min-height:100vh;padding:92px 20px 28px;background:#16202a;color:#eef6ff}.page-hero,.panel{width:min(100%,1680px);margin:0 auto 16px;border:1px solid rgba(169,202,232,.18);border-radius:10px;background:#202c38;box-shadow:0 16px 36px rgba(0,0,0,.18)}.page-hero{display:flex;justify-content:space-between;gap:20px;padding:26px 30px}.eyebrow{margin:0 0 8px;color:#8bdfff}.page-hero h1{margin:0}.page-hero p{color:#c8d6e3}.hero-actions,.panel-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}.panel{padding:22px}@media print{.coal-nav-shell,.page-hero .hero-actions,.panel-head{display:none!important}.report-page{padding:0;background:#fff;color:#000}.panel{box-shadow:none;border:0;background:#fff}}@media(max-width:900px){.report-page{padding-top:24px}.page-hero{flex-direction:column}}
+.report-page{height:100%;overflow:hidden;padding:0;background:#16202a;color:#eef6ff}.page-hero,.panel{width:min(100%,1680px);margin:0 auto 16px;border:1px solid rgba(169,202,232,.18);border-radius:10px;background:#202c38;box-shadow:0 16px 36px rgba(0,0,0,.18)}.page-hero{display:flex;justify-content:space-between;gap:20px;padding:26px 30px}.eyebrow{margin:0 0 8px;color:#8bdfff}.page-hero h1{margin:0}.page-hero p{color:#c8d6e3}.hero-actions,.panel-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}.panel{padding:22px}@media print{.coal-nav-shell,.page-hero .hero-actions,.panel-head{display:none!important}.report-page{padding:0;background:#fff;color:#000}.panel{box-shadow:none;border:0;background:#fff}}@media(max-width:900px){.report-page{padding-top:24px}.page-hero{flex-direction:column}}
 </style>

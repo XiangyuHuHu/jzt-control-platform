@@ -1,3 +1,5 @@
+import { withApiBase } from './apiBase'
+
 export interface DispatchRecordDto {
   id?: number
   recordNo: string
@@ -322,7 +324,7 @@ const buildQuery = (params: Record<string, string | number | boolean | undefined
 }
 
 const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
-  const response = await fetch(path, {
+  const response = await fetch(withApiBase(path), {
     headers: {
       'Content-Type': 'application/json',
       ...(init?.headers || {}),

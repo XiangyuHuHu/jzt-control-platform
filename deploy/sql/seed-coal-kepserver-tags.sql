@@ -1,6 +1,6 @@
--- Auto-generated from 洗煤厂设备新.csv and 洗煤厂模拟量信号1.csv
+-- Auto-generated from 洗煤厂设备新.csv and 洗煤厂模拟量信号.csv
 -- 洗煤厂设备新.csv source_path format: NS2|String|洗煤厂PLC.洗煤厂设备新.<Tag Name>
--- 洗煤厂模拟量信号1.csv source_path format: NS2|String|洗煤厂PLC.洗煤厂模拟量信号.<Tag Name>
+-- 洗煤厂模拟量信号.csv source_path format: NS2|String|洗煤厂PLC.洗煤厂模拟量信号.<Tag Name>
 -- Execute after JPA has created asset_device, iot_tag and iot_tag_mapping tables.
 
 INSERT INTO asset_category (code, name, description, level, sort, status)
@@ -2549,3 +2549,20 @@ VALUES
 ON CONFLICT (mapping_id) DO UPDATE SET tag_code = EXCLUDED.tag_code, business_code = EXCLUDED.business_code, business_name = EXCLUDED.business_name, source_path = EXCLUDED.source_path, transform_rule = EXCLUDED.transform_rule, enabled = EXCLUDED.enabled, remark = EXCLUDED.remark, updated_at = NOW();
 
 -- Summary: devices=283, tags=1123, mappings=1123
+
+-- 兼容历史文本：统一“模拟量信号1.csv”为“模拟量信号.csv”
+UPDATE iot_tag
+SET
+  source_path = regexp_replace(source_path, '^NS2\\|String\\|洗煤厂PLC\\.洗煤厂模拟量信号1\\.', 'NS2|String|洗煤厂PLC.洗煤厂模拟量信号.'),
+  remark = replace(remark, '洗煤厂模拟量信号1.csv', '洗煤厂模拟量信号.csv'),
+  updated_at = NOW()
+WHERE source_path LIKE 'NS2|String|洗煤厂PLC.洗煤厂模拟量信号1.%'
+   OR remark LIKE '%洗煤厂模拟量信号1.csv%';
+
+UPDATE iot_tag_mapping
+SET
+  source_path = regexp_replace(source_path, '^NS2\\|String\\|洗煤厂PLC\\.洗煤厂模拟量信号1\\.', 'NS2|String|洗煤厂PLC.洗煤厂模拟量信号.'),
+  remark = replace(remark, '洗煤厂模拟量信号1.csv', '洗煤厂模拟量信号.csv'),
+  updated_at = NOW()
+WHERE source_path LIKE 'NS2|String|洗煤厂PLC.洗煤厂模拟量信号1.%'
+   OR remark LIKE '%洗煤厂模拟量信号1.csv%';

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="coal-page section-page">
     <CoalQuickBar
       title="安全与健康专项"
@@ -317,7 +317,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.section-page{min-height:100vh;padding:0 20px 24px;background:#091019;color:#eef6ff}
+.section-page{height:100%;overflow:hidden;padding:0;background:#091019;color:#eef6ff}
 .page-shell{width:min(100%,1680px);margin:0 auto}
 .section-hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:20px}
 .section-eyebrow{margin:0 0 10px;color:#72d8ff;font-size:12px;letter-spacing:.2em;text-transform:uppercase}

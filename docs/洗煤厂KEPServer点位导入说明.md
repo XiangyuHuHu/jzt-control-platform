@@ -5,7 +5,7 @@
 - SQL：`deploy/sql/seed-coal-kepserver-tags.sql`
 - 来源表：
   - `洗煤厂设备新.csv`
-  - `洗煤厂模拟量信号1.csv`
+  - `洗煤厂模拟量信号.csv`
 
 ## 导入范围
 
@@ -17,7 +17,7 @@
 
 ```text
 洗煤厂设备新.csv: NS2|String|洗煤厂PLC.洗煤厂设备新.<tagname>
-洗煤厂模拟量信号1.csv: NS2|String|洗煤厂PLC.洗煤厂模拟量信号.<tagname>
+洗煤厂模拟量信号.csv: NS2|String|洗煤厂PLC.洗煤厂模拟量信号.<tagname>
 ```
 
 例如：

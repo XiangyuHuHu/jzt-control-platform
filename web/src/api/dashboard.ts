@@ -1,5 +1,7 @@
+import { withApiBase } from './apiBase'
+
 const request = async <T>(path: string): Promise<T> => {
-  const response = await fetch(path, { headers: { Accept: 'application/json' } })
+  const response = await fetch(withApiBase(path), { headers: { Accept: 'application/json' } })
   if (!response.ok) throw new Error(`Dashboard request failed: ${response.status}`)
   return response.json()
 }

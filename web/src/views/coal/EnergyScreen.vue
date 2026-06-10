@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="energy-screen">
     <section class="screen-header">
       <div class="header-left">
@@ -648,7 +648,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .energy-screen {
-  min-height: 100vh;
+  height:100%;overflow:hidden;
   padding: 24px 0 32px;
   background:
     radial-gradient(circle at center, rgba(38, 166, 255, 0.12), transparent 28%),

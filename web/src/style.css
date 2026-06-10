@@ -40,7 +40,7 @@
 html,
 body,
 #app {
-  min-height: 100vh;
+  height: 100%;
 }
 
 body {
@@ -98,15 +98,11 @@ textarea {
 
 #app {
   width: 100%;
-  min-height: 100vh;
-}
-
-body.coal-theme #app {
-  padding-top: 72px;
+  height: 100%;
 }
 
 body.coal-theme {
-  overflow-x: hidden;
+  overflow: hidden;
   background:
     radial-gradient(circle at top left, rgba(42, 143, 255, 0.14), transparent 30%),
     radial-gradient(circle at top right, rgba(24, 211, 159, 0.12), transparent 24%),
@@ -282,7 +278,9 @@ body.coal-theme :is(h1, h2, h3, .page-title, .panel-title) {
 }
 
 :is(.dashboard, .monitor, .device, .alarm, .user, .workorder, .report, .login-page, .coal-page) {
-  min-height: 100vh;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
   background: linear-gradient(180deg, #334355 0%, #2d3b4a 100%);
 }
 
