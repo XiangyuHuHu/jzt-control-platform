@@ -11,7 +11,7 @@
         <div>
           <p class="section-eyebrow">工艺流程</p>
           <h1>带电运行信号流程图</h1>
-          <p class="section-text">基于设备流程图和设备点表整理，只展示具备“.带电”布尔运行信号的核心设备。</p>
+          <p class="section-text">设备名称按“洗煤厂设备新.csv”带电点表校正；后台资产台账当前为空，实时点位仍以 IoT 点表接入情况为准。</p>
         </div>
       </section>
 
@@ -242,55 +242,55 @@ const flowTransform = computed(
 )
 
 const poweredNodeConfigs: PoweredNodeConfig[] = [
-  { key: 'prep-belt', code: '121/122/141', name: '转载皮带', section: '原煤准备', signalName: '121.带电 / 122.带电 / 141.带电', tagCode: '121.带电', address: 'DB185,D54.1 等', x: 45, y: 70 },
-  { key: 'feeder', code: '127-132', name: '原煤给煤机', section: '入洗', signalName: '127.带电等', tagCode: '127.带电', address: 'DB185,D1404.1 等', x: 185, y: 70 },
+  { key: 'prep-belt', code: '121/122/141', name: '转载皮带', section: '原煤准备', signalName: '121.带电 / 122.带电 / 141.带电', tagCode: '121.带电', address: 'DB185,D54.1 / D270.1 / D72.1', x: 45, y: 70 },
+  { key: 'feeder', code: '127-132', name: '原煤给煤机', section: '入洗', signalName: '127.带电 / 128.带电 / 129.带电 / 130.带电 / 131.带电 / 132.带电', tagCode: '127.带电', address: 'DB185,D1404.1-D1494.1', x: 185, y: 70 },
   { key: 'raw-belt', code: '301', name: '原煤皮带', section: '入洗', signalName: '301.带电', tagCode: '301.带电', address: '点表 301.带电', x: 325, y: 70 },
   { key: 'mag-separator', code: '302', name: '电磁除铁器', section: '入洗', signalName: '302.带电', tagCode: '302.带电', address: '点表 302.带电', x: 465, y: 70 },
-  { key: 'grading-screen', code: '303/304', name: '原煤分级筛', section: '筛分', signalName: '303.带电 / 304.带电', tagCode: '303.带电', address: '点表 303.带电 等', x: 605, y: 70 },
-  { key: 'deslime-screen', code: '305/306', name: '块煤脱泥筛', section: '筛分', signalName: '305.带电 / 306.带电', tagCode: '305.带电', address: '点表 305.带电 等', x: 745, y: 70 },
-  { key: 'shallow-separator', code: '307', name: '浅槽分选机', section: '块煤分选', signalName: '307.带电', tagCode: '307.带电', address: '点表 307.带电', x: 885, y: 70 },
-  { key: 'raw-crusher', code: '324a/b', name: '原煤破碎机', section: '破碎', signalName: '324a.带电 / 324b.带电', tagCode: '324a.带电', address: '点表 324a.带电 等', x: 605, y: 180 },
-  { key: 'cyclone-feed', code: '332', name: '旋流器入料泵', section: '主洗', signalName: '332.带电', tagCode: '332.带电', address: '点表 332.带电', x: 745, y: 180 },
+  { key: 'grading-screen', code: '303/304', name: '分级筛', section: '筛分', signalName: '303.带电 / 304.带电', tagCode: '303.带电', address: 'DB185,D738.1 / D720.1', x: 605, y: 70 },
+  { key: 'deslime-screen', code: '305/306', name: '脱泥筛', section: '筛分', signalName: '305.带电 / 306.带电', tagCode: '305.带电', address: 'DB185,D1044.1 / D1026.1', x: 745, y: 70 },
+  { key: 'shallow-separator', code: '307', name: '浅槽', section: '块煤分选', signalName: '307.带电', tagCode: '307.带电', address: 'DB185,D1008.1', x: 885, y: 70 },
+  { key: 'raw-crusher', code: '324a/b', name: '原煤破碎机', section: '破碎', signalName: '324a.带电 / 324b.带电', tagCode: '324a.带电', address: 'DB185,D162.1 / D180.1', x: 605, y: 180 },
+  { key: 'cyclone-feed', code: '332', name: '旋流器入料泵', section: '主洗', signalName: '332.带电', tagCode: '332.带电', address: 'DB185,D1620.1', x: 745, y: 180 },
 
-  { key: 'clean-drain', code: '308A/B', name: '块精煤脱介筛', section: '精煤', signalName: '308A.带电 / 308B.带电', tagCode: '308A.带电', address: '点表 308A.带电 等', x: 1030, y: 70 },
-  { key: 'clean-centrifuge', code: '309/310', name: '块精煤离心机', section: '精煤', signalName: '309.带电 / 310.带电', tagCode: '309.带电', address: '点表 309.带电 等', x: 1170, y: 70 },
-  { key: 'clean-crusher', code: '311a/b', name: '块精煤破碎机', section: '精煤', signalName: '311a.带电 / 311b.带电', tagCode: '311a.带电', address: '点表 311a.带电 等', x: 1310, y: 70 },
-  { key: 'mag-tail-pump', code: '316', name: '块煤磁尾泵', section: '介质回收', signalName: '316.带电', tagCode: '316.带电', address: '点表 316.带电', x: 885, y: 180 },
-  { key: 'magnetic', code: '317-319', name: '块煤稀介磁选机', section: '介质回收', signalName: '317.带电等', tagCode: '317.带电', address: '点表 317.带电 等', x: 1030, y: 180 },
-  { key: 'clean-scraper', code: '320/321', name: '刮板机', section: '精煤', signalName: '320.带电 / 321.带电', tagCode: '320.带电', address: '点表 320.带电 等', x: 1170, y: 180 },
-  { key: 'medium-pump', code: '323A/B', name: '加介泵', section: '介质回收', signalName: '323A.带电 / 323B.带电', tagCode: '323A.带电', address: '点表 323A.带电 等', x: 1310, y: 180 },
-  { key: 'shaft-water', code: '328', name: '轴封水泵', section: '介质回收', signalName: '328.带电', tagCode: '328.带电', address: '点表 328.带电', x: 885, y: 840 },
+  { key: 'clean-drain', code: '308A/B', name: '精煤脱介筛', section: '精煤', signalName: '308A.带电 / 308B.带电', tagCode: '308A.带电', address: 'DB185,D1206.1 / D1188.1', x: 1030, y: 70 },
+  { key: 'clean-centrifuge', code: '309/310', name: '离心机主电机', section: '精煤', signalName: '309.带电 / 310.带电', tagCode: '309.带电', address: 'DB185,D846.1 / D828.1', x: 1170, y: 70 },
+  { key: 'clean-crusher', code: '311a/b', name: '精煤破碎机', section: '精煤', signalName: '311a.带电 / 311b.带电', tagCode: '311a.带电', address: 'DB185,D108.1 / D126.1', x: 1310, y: 70 },
+  { key: 'mag-tail-pump', code: '316', name: '块煤磁尾泵', section: '介质回收', signalName: '316.带电', tagCode: '316.带电', address: 'DB185,D1602.1', x: 885, y: 180 },
+  { key: 'magnetic', code: '317-319', name: '磁选机', section: '介质回收', signalName: '317.带电 / 318.带电 / 319.带电', tagCode: '317.带电', address: 'DB185,D918.1 / D900.1 / D882.1', x: 1030, y: 180 },
+  { key: 'clean-scraper', code: '320/321', name: '刮板机', section: '精煤', signalName: '320.带电 / 321.带电', tagCode: '320.带电', address: 'DB185,D936.1 / D954.1', x: 1170, y: 180 },
+  { key: 'medium-pump', code: '323A/B', name: '加介泵', section: '介质回收', signalName: '323A.带电 / 323B.带电', tagCode: '323A.带电', address: 'DB185,D1080.1 / D1062.1', x: 1310, y: 180 },
+  { key: 'shaft-water', code: '328', name: '轴封水泵', section: '介质回收', signalName: '328.带电', tagCode: '328.带电', address: 'DB185,D2160.1', x: 885, y: 840 },
 
-  { key: 'gangue-drain', code: '312', name: '块矸石脱介筛', section: '矸石', signalName: '312.带电', tagCode: '312.带电', address: '点表 312.带电', x: 1030, y: 290 },
-  { key: 'gangue-belt', code: '901/911', name: '矸石皮带', section: '矸石输送', signalName: '901.带电 / 911.带电', tagCode: '901.带电', address: '点表 901.带电 等', x: 1170, y: 290 },
-  { key: 'gangue-feeder', code: '902/903', name: '矸石给煤机', section: '矸石装车', signalName: '902.带电 / 903.带电', tagCode: '902.带电', address: '点表 902.带电 等', x: 1310, y: 290 },
-  { key: 'product-belt', code: '701/702', name: '产品带式输送机', section: '产品输送', signalName: '701.带电 / 702.带电', tagCode: '701.带电', address: '点表 701.带电 等', x: 1030, y: 400 },
-  { key: 'product-screen', code: '711a/b', name: '块精分级筛', section: '产品仓', signalName: '711a.带电 / 711b.带电', tagCode: '711a.带电', address: '点表 711a.带电 等', x: 1170, y: 400 },
-  { key: 'bin-scraper', code: '712/713', name: '配仓刮板机', section: '产品仓', signalName: '712.带电 / 713.带电', tagCode: '712.带电', address: '点表 712.带电 等', x: 1310, y: 400 },
-  { key: 'bin-feeder-clean', code: '721-728', name: '精煤/块煤给煤机', section: '产品仓', signalName: '721.带电等', tagCode: '721.带电', address: '点表 721.带电 等', x: 1170, y: 510 },
-  { key: 'bin-feeder-mix', code: '729-736', name: '混煤给煤机', section: '产品仓', signalName: '729.带电等', tagCode: '729.带电', address: '点表 729.带电 等', x: 1310, y: 510 },
+  { key: 'gangue-drain', code: '312', name: '矸石脱介筛', section: '矸石', signalName: '312.带电', tagCode: '312.带电', address: 'DB185,D1170.1', x: 1030, y: 290 },
+  { key: 'gangue-belt', code: '901/911', name: '矸石皮带', section: '矸石输送', signalName: '901.带电 / 911.带电', tagCode: '901.带电', address: 'DB185,D378.1 / D252.1', x: 1170, y: 290 },
+  { key: 'gangue-feeder', code: '902/903', name: '矸石给煤机', section: '矸石装车', signalName: '902.带电 / 903.带电', tagCode: '902.带电', address: 'DB185,D1368.1 / D1386.1', x: 1310, y: 290 },
+  { key: 'product-belt', code: '701/702', name: '带式输送机', section: '产品输送', signalName: '701.带电 / 702.带电', tagCode: '701.带电', address: 'DB185,D1728.1 / D1710.1', x: 1030, y: 400 },
+  { key: 'product-screen', code: '711a/b', name: '分级筛', section: '产品仓', signalName: '711a.带电 / 711b.带电', tagCode: '711a.带电', address: 'DB185,D2394.1 / D2376.1', x: 1170, y: 400 },
+  { key: 'bin-scraper', code: '712/713', name: '刮板输送机', section: '产品仓', signalName: '712.带电 / 713.带电', tagCode: '712.带电', address: 'DB185,D1656.1 / D1638.1', x: 1310, y: 400 },
+  { key: 'bin-feeder-clean', code: '721-728', name: '给煤机', section: '产品仓', signalName: '721.带电 / 722.带电 / 723.带电 / 724.带电 / 725.带电 / 726.带电 / 727.带电 / 728.带电', tagCode: '721.带电', address: 'DB185,D3618.1-D3744.1', x: 1170, y: 510 },
+  { key: 'bin-feeder-mix', code: '729-736', name: '给煤机', section: '产品仓', signalName: '729.带电 / 730.带电 / 731.带电 / 732.带电 / 733.带电 / 734.带电 / 735.带电 / 736.带电', tagCode: '729.带电', address: 'DB185,D3762.1-D3888.1', x: 1310, y: 510 },
 
-  { key: 'stack-screen', code: '334', name: '高频叠层筛', section: '煤泥水', signalName: '334.带电', tagCode: '334.带电', address: '点表 334.带电', x: 605, y: 400 },
-  { key: 'slime-centrifuge', code: '336', name: '煤泥离心机', section: '煤泥水', signalName: '336.带电', tagCode: '336.带电', address: '点表 336.带电', x: 745, y: 400 },
-  { key: 'clean-water-pump', code: '338', name: '清水泵', section: '水系统', signalName: '338.带电', tagCode: '338.带电', address: '点表 338.带电', x: 745, y: 840 },
-  { key: 'stirrer', code: '341', name: '压滤桶搅拌', section: '煤泥水', signalName: '341.带电', tagCode: '341.带电', address: '点表 341.带电', x: 325, y: 560 },
-  { key: 'filter-feed', code: '342/343', name: '压滤机入料泵', section: '煤泥水', signalName: '342.带电 / 343.带电', tagCode: '342.带电', address: '点表 342.带电 等', x: 465, y: 560 },
-  { key: 'press-water', code: '345', name: '压榨水泵', section: '煤泥水', signalName: '345.带电', tagCode: '345.带电', address: '点表 345.带电', x: 605, y: 560 },
-  { key: 'filter-press', code: '347/348', name: '中高压压滤机', section: '煤泥水', signalName: '347.带电 / 348.带电', tagCode: '347.带电', address: '点表 347.带电 等', x: 745, y: 560 },
-  { key: 'slime-scraper', code: '349-351', name: '煤泥收集刮板机', section: '煤泥水', signalName: '349.带电 / 350.带电 / 351.带电', tagCode: '349.带电', address: '点表 349.带电 等', x: 885, y: 560 },
+  { key: 'stack-screen', code: '334', name: '高频叠层筛', section: '煤泥水', signalName: '334.带电', tagCode: '334.带电', address: 'DB185,D1890.1', x: 605, y: 400 },
+  { key: 'slime-centrifuge', code: '336', name: '离心机主电机', section: '煤泥水', signalName: '336.带电', tagCode: '336.带电', address: 'DB185,D1944.1', x: 745, y: 400 },
+  { key: 'clean-water-pump', code: '338', name: '清水泵', section: '水系统', signalName: '338.带电', tagCode: '338.带电', address: 'DB185,D2556.1', x: 745, y: 840 },
+  { key: 'stirrer', code: '341', name: '搅拌电机', section: '煤泥水', signalName: '341.带电', tagCode: '341.带电', address: 'DB185,D1746.1', x: 325, y: 560 },
+  { key: 'filter-feed', code: '342/343', name: '压滤机入料泵', section: '煤泥水', signalName: '342.带电 / 343.带电', tagCode: '342.带电', address: 'DB185,D1692.1 / D1674.1', x: 465, y: 560 },
+  { key: 'press-water', code: '345', name: '压榨水泵电源', section: '煤泥水', signalName: '345.带电', tagCode: '345.带电', address: 'DB185,D2340.1', x: 605, y: 560 },
+  { key: 'filter-press', code: '347/348', name: '中高压压滤机', section: '煤泥水', signalName: '347.带电 / 348.带电', tagCode: '347.带电', address: 'DB185,D1782.1 / D1764.1', x: 745, y: 560 },
+  { key: 'slime-scraper', code: '349-351', name: '煤泥刮板输送机', section: '煤泥水', signalName: '349.带电 / 350.带电 / 351.带电', tagCode: '349.带电', address: 'DB185,D1836.1 / D1818.1 / D1800.1', x: 885, y: 560 },
 
-  { key: 'slime-crusher', code: '352', name: '煤泥破碎机', section: '煤泥水', signalName: '352.带电', tagCode: '352.带电', address: '点表 352.带电', x: 325, y: 700 },
-  { key: 'slime-belt', code: '353', name: '煤泥转载皮带', section: '煤泥水', signalName: '353.带电', tagCode: '353.带电', address: '点表 353.带电', x: 465, y: 700 },
-  { key: 'reagent', code: '371/372', name: '自动加药装置', section: '加药', signalName: '371.带电 / 372.带电', tagCode: '371.带电', address: '点表 371.带电 等', x: 605, y: 700 },
-  { key: 'thickener', code: '401-403', name: '浓缩机/底流泵', section: '煤泥水', signalName: '401.带电 / 402.带电 / 403.带电', tagCode: '401.带电', address: '点表 401.带电 等', x: 325, y: 840 },
+  { key: 'slime-crusher', code: '352', name: '煤泥破碎机', section: '煤泥水', signalName: '352.带电', tagCode: '352.带电', address: 'DB185,D2016.1', x: 325, y: 700 },
+  { key: 'slime-belt', code: '353', name: '煤泥转载皮带', section: '煤泥水', signalName: '353.带电', tagCode: '353.带电', address: 'DB185,D2142.1', x: 465, y: 700 },
+  { key: 'reagent', code: '371/372', name: '加药装置', section: '加药', signalName: '371.带电 / 372.带电', tagCode: '371.带电', address: 'DB185,D2070.1 / D2052.1', x: 605, y: 700 },
+  { key: 'thickener', code: '401-403', name: '浓缩机/底流泵', section: '煤泥水', signalName: '401.带电 / 402.带电 / 403.带电', tagCode: '401.带电', address: 'DB185,D2196.1 / D2250.1 / D2232.1', x: 325, y: 840 },
   { key: 'nsj-run', code: 'NSJ', name: '浓缩机启停', section: '浓缩机', signalName: '启停', tagCode: 'coal.kep.smart200.1ff1a0091f0f65a5', address: 'SMART200.NSJ.管控平台数据接口浓缩机.启停', x: 185, y: 840 },
   { key: 'nsj-rake-up', code: 'NSJ', name: '浓缩机提粑', section: '浓缩机', signalName: '提粑', tagCode: 'coal.kep.smart200.cb640af192198087', address: 'SMART200.NSJ.管控平台数据接口浓缩机.提粑', x: 45, y: 840 },
   { key: 'nsj-rake-down', code: 'NSJ', name: '浓缩机降粑', section: '浓缩机', signalName: '降粑', tagCode: 'coal.kep.smart200.c3295f1797bc0c39', address: 'SMART200.NSJ.管控平台数据接口浓缩机.降粑', x: 45, y: 950 },
   { key: 'nsj-limit-high', code: 'NSJ', name: '浓缩机上限位', section: '浓缩机', signalName: '上限位', tagCode: 'coal.kep.smart200.42b4f48c9539995d', address: 'SMART200.NSJ.管控平台数据接口浓缩机.上限位', x: 185, y: 950 },
   { key: 'nsj-limit-low', code: 'NSJ', name: '浓缩机下限位', section: '浓缩机', signalName: '下限位', tagCode: 'coal.kep.smart200.8c269c94cbf49472', address: 'SMART200.NSJ.管控平台数据接口浓缩机.下限位', x: 325, y: 950 },
-  { key: 'circulation-water', code: '404/405', name: '循环/冲洗水泵', section: '水系统', signalName: '404.带电 / 405.带电', tagCode: '404.带电', address: '点表 404.带电 等', x: 605, y: 840 },
-  { key: 'filter-drain-seal', code: '354/356', name: '压滤排污/水封泵', section: '煤泥水', signalName: '354.带电 / 356.带电', tagCode: '354.带电', address: '点表 354.带电 等', x: 745, y: 700 },
-  { key: 'air-blower', code: '361/363', name: '吹风风机', section: '空压吹风', signalName: '361.带电 / 363A.带电 / 363B.带电', tagCode: '361.带电', address: '点表 361.带电 等', x: 885, y: 700 },
+  { key: 'circulation-water', code: '404/405', name: '循环/冲洗水泵', section: '水系统', signalName: '404.带电 / 405.带电', tagCode: '404.带电', address: 'DB185,D18.1 / D2268.1', x: 605, y: 840 },
+  { key: 'filter-drain-seal', code: '354/356', name: '压滤排污/轴封水泵', section: '煤泥水', signalName: '354.带电 / 356.带电', tagCode: '354.带电', address: 'DB185,D2088.1 / D2214.1', x: 745, y: 700 },
+  { key: 'air-blower', code: '361/363', name: '低压/高压风机', section: '空压吹风', signalName: '361.带电 / 363A.带电 / 363B.带电', tagCode: '361.带电', address: 'DB185,D1584.1 / D1566.1 / D1548.1', x: 885, y: 700 },
 ]
 
 const flowEdges: FlowEdge[] = [

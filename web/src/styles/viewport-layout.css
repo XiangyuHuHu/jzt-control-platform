@@ -62,7 +62,8 @@ body.coal-theme :is(
   .equipment-screen,
   .dispatch-page,
   .planning-page,
-  .sales-page
+  .sales-page,
+  .smart-density-page
 ) {
   display: flex;
   flex-direction: column;

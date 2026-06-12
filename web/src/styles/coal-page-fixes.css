@@ -338,6 +338,20 @@ body.coal-theme .shift-page .panel {
   }
 }
 
+body.coal-theme .process-flow-page .flow-map {
+  min-height: 0;
+}
+
+body.coal-theme .smart-density-page .density-workbench {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+body.coal-theme .smart-density-page .guidance-panel .rule-table :deep(.el-scrollbar__wrap) {
+  max-height: none;
+}
+
 @media (max-width: 1200px) {
   body.coal-theme .planning-page .panel-grid {
     grid-template-columns: 1fr !important;
